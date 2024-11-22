@@ -1,33 +1,28 @@
-#include <BLEDevice.h>
-#include <BLEScan.h>
+#include <WifiConnect.h>
 #include <Arduino.h>
+#include <PostData.h>
+#include <BLE.h>
 
-BLEScan *pBLEScan;
+char *host = "https://panel.trigonstudios.com";
+char *route = "/api/occupancy/mensa-academica-01";
+char *apiUrl = strcat(host, route);
+
+// Replace these with your network credentials
+char *ssid = "Joshua's S21+";
+char *password = "12345678";
 
 void setup()
 {
-    Serial.begin(9600);
-
-    BLEDevice::init("");
-    pBLEScan = BLEDevice::getScan();
-    pBLEScan->setActiveScan(true); // Set active scanning for better results
+    Serial.begin(9600); // Start Serial Monitor
+    connectToWifiSimple(ssid, password);
+    initBLE();
 }
 
 void loop()
 {
-    Serial.println("Scanning for BLE devices...");
-    BLEScanResults foundDevices = pBLEScan->start(1, false); // Scan for 5 seconds
+    int devices = countDevices(2);
+    Serial.println("Found " + String(devices) + " devices");
 
-    Serial.printf("Found %d devices\n", foundDevices.getCount());
-
-    // for (int i = 0; i < foundDevices.getCount(); i++)
-    // {
-    //     BLEAdvertisedDevice device = foundDevices.getDevice(i);
-    //     Serial.print("Device Address: ");
-    //     Serial.println(device.getAddress().toString().c_str());
-    //     Serial.print("Device Name: ");
-    //     Serial.println(device.getName().c_str());
-    // }
-
-    // delay(10000); // Wait 10 seconds before next scan
+    Serial.println("Posting to " + String(apiUrl));
+    postOccupancy(apiUrl, devices);
 }
