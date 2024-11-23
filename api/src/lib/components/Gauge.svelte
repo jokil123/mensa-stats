@@ -63,12 +63,13 @@
 </script>
 
 <div>
-	<canvas id="gauge" width="400" height="300"></canvas>
+	<canvas id="gauge" style="width:100%;"></canvas>
 </div>
 
 <style>
 	canvas {
-		display: block;
-		margin: auto;
+		/* display: block; */
+		/* margin: auto; */
+		/* width: 100px; */
 	}
 </style>

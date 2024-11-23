@@ -25,13 +25,11 @@
 			Neuer Rekord 🔥
 		{/if}
 
-		<div class="relative">
-			<Gauge min={0} max={data.max} current={data.occupancy} />
-		</div>
+		<Gauge min={0} max={data.max} current={data.occupancy} />
 
 		<h3 class="text-center italic">Wie <OccupancyCaption p={percentage} /></h3>
 
-		<div class="m-auto flex max-h-72 justify-center">
+		<div class="h-72">
 			<Chart history={data.history} />
 		</div>
 	</div>

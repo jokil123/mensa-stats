@@ -39,6 +39,7 @@
 		data,
 		options: {
 			responsive: true,
+			maintainAspectRatio: false,
 			scales: {
 				x: {
 					type: 'time', // Use time scale
@@ -86,4 +87,6 @@
 	});
 </script>
 
-<canvas bind:this={canvas}></canvas>
+<div class="chart-container m-auto" style="position: relative; height:100%; width:100%">
+	<canvas bind:this={canvas}></canvas>
+</div>
