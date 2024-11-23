@@ -22,9 +22,8 @@ jobs:
             - name: Build and push register app
               uses: docker/build-push-action@v3
               with:
-                  working-directory: ./api
+                  context: ./api
                   push: true
-                  file: docker/Dockerfile
                   tags: ${{ secrets.DOCKERHUB_USERNAME }}/mensa-stats:latest
 
             - name: Pterodactyl-Restart (Deploy to prod)
