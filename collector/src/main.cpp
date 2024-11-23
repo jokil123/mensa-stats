@@ -2,27 +2,25 @@
 #include <Arduino.h>
 #include <PostData.h>
 #include <BLE.h>
-
-char *host = "https://panel.trigonstudios.com";
-char *route = "/api/occupancy/mensa-academica-01";
-char *apiUrl = strcat(host, route);
-
-// Replace these with your network credentials
-char *ssid = "Joshua's S21+";
-char *password = "12345678";
+#include <VarExpand.h>
+#include <dotenv.h>
 
 void setup()
 {
     Serial.begin(9600); // Start Serial Monitor
-    connectToWifiSimple(ssid, password);
+    Serial.println(API_URL);
+    Serial.println(DEVICE);
+    Serial.println(TOKEN);
+    Serial.println(WIFI_SSID);
+    Serial.println(WIFI_SECRET);
+    connectToWifiSimple(WIFI_SSID, WIFI_SECRET);
     initBLE();
 }
 
 void loop()
 {
-    int devices = countDevices(2);
-    Serial.println("Found " + String(devices) + " devices");
-
-    Serial.println("Posting to " + String(apiUrl));
-    postOccupancy(apiUrl, devices);
+    int deviceCount = countDevices(5);
+    Serial.println("Found " + String(deviceCount) + " devices");
+    // API_URL)
+    postOccupancy("http://173.212.249.144:36001", DEVICE, TOKEN, deviceCount);
 }
