@@ -21,8 +21,8 @@ jobs:
 
             - name: Build and push register app
               uses: docker/build-push-action@v3
-              working-directory: ./api
               with:
+                  working-directory: ./api
                   push: true
                   file: docker/Dockerfile
                   tags: ${{ secrets.DOCKERHUB_USERNAME }}/mensa-stats:latest
