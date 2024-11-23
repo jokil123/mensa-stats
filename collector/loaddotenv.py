@@ -2,21 +2,28 @@
 # based on https://stackoverflow.com/questions/62314497/access-of-outer-environment-variable-in-platformio
 Import("env") # this is some serious bullshit
 from os.path import isfile
+from pydoc import splitdoc
 
 assert isfile(".env")
 
-try:
-    f = open(".env", "r")
-    lines = f.readlines()
-    envs = []
+try: 
+    e = open(".env", "r")
+    s = open("./src/dotenv.h", "w")
+    
+    content = "#pragma once\n\n"
+    
+    lines = e.readlines()
     for line in lines:
-        name = line.strip().split("=")[0]
+        splits = line.strip().split("=")
+        if (len(splits) <= 1): continue
+        
+        name = splits[0]
         value = "".join(line.strip().split("=")[1:]).strip("\"")
-        envs.append("-D{}=\"{}\"".format(name, value))
-
-    print(envs)
-    env.Append(BUILD_FLAGS=envs)
+        
+        content += "#define {} \"{}\"\n".format(name, value)
+    s.write(content)
 except IOError:
-    print("File .env not accessible",)
+    print("File .env or secrets.h not accessible",)
 finally:
-    f.close()
+    e.close()
+    s.close()
