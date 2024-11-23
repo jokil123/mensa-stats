@@ -1,2 +1,13 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+	export let data;
+</script>
+
+<svelte:head>
+	<title>Mensa Stats</title>
+</svelte:head>
+
+<h1>Mensa Stats</h1>
+
+<h2>Momentane Belegung:</h2>
+
+<h3>{data.occupancy}</h3>
