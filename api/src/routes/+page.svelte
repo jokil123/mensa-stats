@@ -25,7 +25,7 @@
 			Neuer Rekord 🔥
 		{/if}
 
-		<Gauge min={0} max={data.max} current={data.occupancy} />
+		<Gauge min={data.min} max={data.max} current={data.occupancy} />
 
 		<h3 class="text-center italic">Wie <OccupancyCaption p={percentage} /></h3>
 

@@ -29,7 +29,9 @@
 				borderColor: 'rgb(50, 168, 82)',
 				backgroundColor: 'rgb(50, 168, 82, 0.2)',
 				fill: false,
-				data: []
+				data: [],
+				lineTension: 0.5
+				// pointRadius: 1
 			}
 		]
 	};
@@ -38,6 +40,12 @@
 		type: 'line',
 		data,
 		options: {
+			interaction: {
+				mode: 'x',
+				intersect: true,
+				includeInvisible: true,
+				axis: 'xy'
+			},
 			responsive: true,
 			maintainAspectRatio: false,
 			scales: {
@@ -52,14 +60,14 @@
 					},
 					title: {
 						display: true,
-						text: 'Time'
+						text: 'Zeit'
 					}
 				},
 				y: {
 					beginAtZero: true,
 					title: {
 						display: true,
-						text: 'Value'
+						text: 'Geräte'
 					}
 				}
 			}

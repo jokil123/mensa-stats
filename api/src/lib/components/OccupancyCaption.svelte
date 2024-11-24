@@ -3,10 +3,11 @@
 
 	const captions = [
 		{ p: 0.1, c: 'Rewe am Sonntag' },
-		{ p: 0.2, c: 'Tinder auf dem Land' },
+		{ p: 0.3, c: 'Tinder auf dem Land' },
 		{ p: 0.6, c: 'Super-C IT Helpdesk' },
-		{ p: 0.8, c: 'Europapark Anstehen' },
-		{ p: 0.9, c: 'Schlange Stehen Simulator' },
+		{ p: 0.7, c: 'Europapark Anstehen' },
+		{ p: 0.8, c: 'Schlange Stehen Simulator' },
+		{ p: 0.9, c: 'Maschi Party' },
 		{ p: 1, c: 'Travis Scott 2021' }
 	];
 
