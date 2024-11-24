@@ -10,9 +10,6 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: what
-              run: echo ${{ vars.PTE_PANEL_URL }} && echo ${{ vars.PTE_PANEL_ID }}
-        
             - name: Checkout Repository
               uses: actions/checkout@v2
 
@@ -31,7 +28,7 @@ jobs:
 
             - name: Pterodactyl-Restart (Deploy to prod)
               run: |
-                  curl "${{ env.PTE_PANEL_URL}}/api/client/servers/${{ env.PTE_PANEL_ID }}/power" \
+                  curl "${{ vars.PTE_PANEL_URL}}/api/client/servers/${{ vars.PTE_PANEL_ID }}/power" \
                   --fail-with-body \
                   -H 'Accept: application/json' \
                   -H 'Content-Type: application/json' \
