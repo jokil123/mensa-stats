@@ -10,6 +10,9 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
+            - name: what
+              run: echo ${{ vars.PTE_PANEL_URL }} && echo ${{ vars.PTE_PANEL_ID }} ${{env.}}
+        
             - name: Checkout Repository
               uses: actions/checkout@v2
 
@@ -25,9 +28,6 @@ jobs:
                   context: ./api
                   push: true
                   tags: ${{ secrets.DOCKERHUB_USERNAME }}/mensa-stats:latest
-
-            - name: what
-              run: echo ${{ env.PTE_PANEL_URL }} && echo ${{ env.PTE_PANEL_ID }}
 
             - name: Pterodactyl-Restart (Deploy to prod)
               run: |
