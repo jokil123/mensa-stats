@@ -26,6 +26,9 @@ jobs:
                   push: true
                   tags: ${{ secrets.DOCKERHUB_USERNAME }}/mensa-stats:latest
 
+            - name: what
+              run: echo ${{ env.PTE_PANEL_URL }} && echo ${{ env.PTE_PANEL_ID }}
+
             - name: Pterodactyl-Restart (Deploy to prod)
               run: |
                   curl "${{ env.PTE_PANEL_URL}}/api/client/servers/${{ env.PTE_PANEL_ID }}/power" \
