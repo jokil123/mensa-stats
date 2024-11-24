@@ -11,7 +11,7 @@ jobs:
 
         steps:
             - name: what
-              run: echo ${{ vars.PTE_PANEL_URL }} && echo ${{ vars.PTE_PANEL_ID }} ${{env.}}
+              run: echo ${{ vars.PTE_PANEL_URL }} && echo ${{ vars.PTE_PANEL_ID }}
         
             - name: Checkout Repository
               uses: actions/checkout@v2
