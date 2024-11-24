@@ -19,7 +19,7 @@ void setup()
 
 void loop()
 {
-    int deviceCount = countDevices(5);
+    int deviceCount = countDevices(5 * 60); // Count devices every 5 minutes
     Serial.println("Found " + String(deviceCount) + " devices");
     // API_URL)
     postOccupancy("http://173.212.249.144:36001", DEVICE, TOKEN, deviceCount);
