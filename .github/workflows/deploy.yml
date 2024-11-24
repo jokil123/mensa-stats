@@ -27,8 +27,10 @@ jobs:
                   tags: ${{ secrets.DOCKERHUB_USERNAME }}/mensa-stats:latest
 
             - name: Pterodactyl-Restart (Deploy to prod)
-              uses: supercrafter100/Pterodactyl-Restart@v1.0
-              with:
-                  PTE_PANEL_URL: ${{ secrets.PTE_PANEL_URL}}
-                  PTE_BEARER_TOKEN: ${{ secrets.PTE_BEARER_TOKEN }}
-                  PTE_PANEL_ID: ${{ secrets.PTE_PANEL_ID }}
+              run: |
+                  curl "${{ secrets.PTE_PANEL_URL}}/api/client/servers/${{ secrets.PTE_PANEL_ID }}/power" \
+                  -H 'Accept: application/json' \
+                  -H 'Content-Type: application/json' \
+                  -H 'Authorization: Bearer ${{ secrets.PTE_BEARER_TOKEN }}' \
+                  -X POST \
+                  -d '{"signal": "restart"}'
