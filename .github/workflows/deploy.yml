@@ -27,8 +27,8 @@ jobs:
                   tags: ${{ secrets.DOCKERHUB_USERNAME }}/mensa-stats:latest
 
             - name: Pterodactyl-Restart (Deploy to prod)
-              uses: supercrafter100/Pterodactyl-Restart@v1.0
+              uses: hwalker928/ptero-gitsync@v1.0
               with:
-                  PTE_PANEL_URL: ${{ secrets.PTE_PANEL_URL}}
-                  PTE_BEARER_TOKEN: ${{ secrets.PTE_BEARER_TOKEN }}
-                  PTE_PANEL_ID: ${{ secrets.PTE_PANEL_ID }}
+                  panel-url: ${{ secrets.PTE_PANEL_URL }}
+                  api-key: ${{ secrets.PTE_BEARER_TOKEN }}
+                  server-id: ${{ secrets.PTE_PANEL_ID }}
