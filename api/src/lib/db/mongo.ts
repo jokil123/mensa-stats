@@ -3,7 +3,7 @@ import { MongoClient } from 'mongodb';
 // import { DB_URL } from '$env/dynamic/private';
 
 // Default value because otherwise build system breaks lol
-let client: MongoClient = new MongoClient('mongodb://domain.com');
+let client: MongoClient;
 
 export async function start_mongo() {
 	console.log('Starting mongo...');
@@ -16,4 +16,10 @@ export async function start_mongo() {
 	return client;
 }
 
-export default client.db();
+export default () => {
+	if (!client) {
+		throw new Error('Got fetched db before initialization');
+	}
+
+	return client.db();
+};
