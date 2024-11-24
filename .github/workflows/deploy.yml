@@ -28,7 +28,8 @@ jobs:
 
             - name: Pterodactyl-Restart (Deploy to prod)
               run: |
-                  curl "${{ secrets.PTE_PANEL_URL}}/api/client/servers/${{ secrets.PTE_PANEL_ID }}/power" \
+                  curl "${{ env.PTE_PANEL_URL}}/api/client/servers/${{ env.PTE_PANEL_ID }}/power" \
+                  --fail-with-body \
                   -H 'Accept: application/json' \
                   -H 'Content-Type: application/json' \
                   -H 'Authorization: Bearer ${{ secrets.PTE_BEARER_TOKEN }}' \
