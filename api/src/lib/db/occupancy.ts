@@ -2,7 +2,7 @@ import mongo from './mongo';
 
 // Saves an occupancy entry to the db
 export async function saveOccupancyEntry(device: string, occupancy: number) {
-	const collection = mongo.collection('occupancy');
+	const collection = mongo().collection('occupancy');
 
 	const doc = {
 		timestamp: new Date(),
@@ -17,7 +17,7 @@ export async function saveOccupancyEntry(device: string, occupancy: number) {
 
 // Gets the most recent occupancy entry by device
 export async function getOccupancy(device: string): Promise<number | null> {
-	const collection = mongo.collection('occupancy');
+	const collection = mongo().collection('occupancy');
 
 	const mostRecent = await collection
 		.find()
@@ -37,7 +37,7 @@ export async function getOccupancy(device: string): Promise<number | null> {
 export async function getOccupancyMax(device: string, s: number): Promise<number | null> {
 	const now = new Date();
 
-	const max = await mongo
+	const max = await mongo()
 		.collection('occupancy')
 		.aggregate([
 			{
@@ -64,6 +64,37 @@ export async function getOccupancyMax(device: string, s: number): Promise<number
 	return max[0].maxValue as number;
 }
 
+// Gets the minimum Occupancy during the last s seconds
+export async function getOccupancyMin(device: string, s: number): Promise<number | null> {
+	const now = new Date();
+
+	const min = await mongo()
+		.collection('occupancy')
+		.aggregate([
+			{
+				$match: {
+					timestamp: { $gte: new Date(now.getTime() - s * 1000) },
+					'metadata.device': { $eq: device }
+				}
+			},
+			{
+				$group: {
+					_id: null,
+					maxValue: { $min: '$occupancy' }
+				}
+			}
+		])
+		.toArray();
+
+	if (min.length != 1) {
+		// if there is no maximum return the last entry
+		console.log("Couldn't get min, using last value");
+		return await getOccupancy(device);
+	}
+
+	return min[0].maxValue as number;
+}
+
 export type HistoryPoint = {
 	timestamp: Date;
 	occupancy: number;
@@ -73,7 +104,7 @@ export type HistoryPoint = {
 export async function getOccupancyHistory(device: string, s: number): Promise<HistoryPoint[]> {
 	const now = new Date();
 
-	const historyDocs = await mongo
+	const historyDocs = await mongo()
 		.collection('occupancy')
 		.aggregate([
 			{
