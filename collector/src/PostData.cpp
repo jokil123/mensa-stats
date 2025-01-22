@@ -11,6 +11,7 @@ void postOccupancy(char *api_url, char *device, char *token, int occupancy)
     snprintf(urlBuf, sizeof(urlBuf), "%s%s", api_url, "/api/occupancy");
 
     http.begin(urlBuf);
+
     http.addHeader("Content-Type", "Content-Type: application/json");
 
     char buffer[256];
