@@ -4,17 +4,14 @@
 #include <BLEScan.h>
 #include <Arduino.h>
 
-BLEScan *pBLEScan;
-
-void initBLE()
-{
-    BLEDevice::init("");
-    pBLEScan = BLEDevice::getScan();
-    pBLEScan->setActiveScan(true); // Set active scanning for better results
-}
-
+// not efficient but I dont have enough mem to do init at the start
 int countDevices(int duration)
 {
-    BLEScanResults foundDevices = pBLEScan->start(duration, false); // Scan for 5 seconds
+    BLEDevice::init("");
+    BLEScan *scan = BLEDevice::getScan();
+    scan->setActiveScan(true);
+
+    BLEScanResults foundDevices = scan->start(duration, false); // Scan for 5 seconds
     return foundDevices.getCount();
+    BLEDevice::deinit(true);
 }

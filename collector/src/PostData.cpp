@@ -3,7 +3,7 @@
 #include <HTTPClient.h>
 #include <VarExpand.h>
 
-void postOccupancy(char *api_url, char *device, char *token, int occupancy)
+int postOccupancy(char *api_url, char *device, char *token, int occupancy)
 {
     HTTPClient http;
 
@@ -35,4 +35,6 @@ void postOccupancy(char *api_url, char *device, char *token, int occupancy)
     }
 
     http.end();
+
+    return httpResponseCode;
 }
