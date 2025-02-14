@@ -30,7 +30,7 @@
 		<h3 class="text-center italic">Wie <OccupancyCaption p={percentage} /></h3>
 
 		<div class="h-72">
-			<Chart history={data.history} />
+			<Chart history={data.averagedHistory} />
 		</div>
 	</div>
 </MarginBox>

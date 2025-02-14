@@ -100,6 +100,61 @@ export type HistoryPoint = {
 	occupancy: number;
 };
 
+// gets all occupancy datapoints of the last s seconds and averages data over binSize minutes
+export async function getAveragedOccupancyHistory(
+	device: string,
+	s: number,
+	binSize: number
+): Promise<HistoryPoint[]> {
+	const now = new Date();
+
+	const averagedHistoryDocs = await mongo()
+		.collection('occupancy')
+		.aggregate([
+			{
+				$match: {
+					timestamp: { $gte: new Date(now.getTime() - s * 1000) },
+					'metadata.device': { $eq: device }
+				}
+			},
+			{
+				$sort: { timestamp: 1 }
+			},
+			{
+				$group: {
+					_id: {
+						$dateTrunc: {
+							// Truncate timestamp to the hour
+							date: '$timestamp',
+							unit: 'minute',
+							binSize: binSize // Optional: If you want to group by, say, 2-hour intervals, set binSize: 2
+						}
+					},
+					averageOccupancy: { $avg: '$occupancy' }
+				}
+			},
+			{
+				$project: {
+					_id: 0, // Exclude _id
+					timestamp: '$_id', // Rename _id to timestamp for clarity
+					averageOccupancy: 1,
+					medianValue: 1
+				}
+			}
+		])
+		.toArray();
+
+	const averagedHistoryData = averagedHistoryDocs.map((d) => {
+		return {
+			timestamp: d.timestamp,
+			occupancy: d.averageOccupancy
+		};
+	});
+
+	// console.log(averagedHistoryData);
+	return averagedHistoryData;
+}
+
 // gets all occupancy datapoints of the last s seconds
 export async function getOccupancyHistory(device: string, s: number): Promise<HistoryPoint[]> {
 	const now = new Date();
@@ -112,6 +167,9 @@ export async function getOccupancyHistory(device: string, s: number): Promise<Hi
 					timestamp: { $gte: new Date(now.getTime() - s * 1000) },
 					'metadata.device': { $eq: device }
 				}
+			},
+			{
+				$sort: { timestamp: 1 }
 			}
 		])
 		.toArray();

@@ -14,10 +14,10 @@
 	let selected = $derived(
 		captions
 			.filter((c) => {
-				return c.p <= p;
+				return p <= c.p;
 			})
 			.sort((a, b) => {
-				return b.p - a.p;
+				return a.p - b.p;
 			})[0]
 	);
 </script>

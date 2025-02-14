@@ -90,7 +90,7 @@
 
 	$effect(() => {
 		chart.data.datasets[0].data = dataPoints;
-		console.log(chart.data.datasets[0].data);
+		// console.log(chart.data.datasets[0].data);
 		chart.update();
 	});
 </script>
