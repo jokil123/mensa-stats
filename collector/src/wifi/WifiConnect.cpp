@@ -5,7 +5,6 @@
 #include <esp_wpa2.h> // This is for WPA2 Enterprise connections
 #include <esp_wifi.h>
 #include <HTTPClient.h>
-#include <util/Util.h>
 
 #define WIFI_SSID "RWTH-guests"
 #define LOGON_URL "https://access.wlan.rwth-aachen.de/login.php"
@@ -13,39 +12,61 @@
 void connectToGuest()
 {
     Serial.println("Connecting to RWTH Guest Network");
+
     WiFi.disconnect();
     delay(1000);
-
     WiFi.mode(WIFI_STA);
-    WiFi.begin(WIFI_SSID); // Directly begin with SSID
+    WiFi.begin();
 
-    Serial.println("Connecting to RWTH Guest Network...");
+    uint8_t mac[6] = {(random(0, 255) << 1), random(0, 255), random(0, 255), random(0, 255), random(0, 255), random(0, 255)};
+    printMac(mac);
+
+    esp_err_t err = esp_wifi_set_mac(WIFI_IF_STA, mac);
+
+    if (err == ESP_OK)
+    {
+        Serial.println("Success changing Mac Address: ");
+    }
+    else
+    {
+        Serial.print("Error changing Mac Address: ");
+        Serial.println(err);
+    }
+
+    WiFi.begin(WIFI_SSID);
     WiFi.setAutoReconnect(true);
 
-    int reconnectAttempts = 0;
     while (WiFi.status() != WL_CONNECTED)
     {
-        reconnectAttempts++;
-        Serial.print("Reconnect Attempt: ");
-        Serial.print(reconnectAttempts);
-        Serial.print(", WiFi Status: ");
-        Serial.println(WiFi.status());
+        Serial.print(WiFi.status());
+        Serial.print(" ");
         delay(1000);
-        if (reconnectAttempts > 30)
-        { // Timeout after 30 seconds (adjustable)
-            Serial.println("Reconnection timed out. Exiting connectToGuest().");
-            return; // Exit the function after timeout
-        }
     }
     Serial.println();
 
-    Serial.println("Connected Successfully");
+    Serial.println("Connected Sucessfully");
     Serial.println(WiFi.localIP());
 
-    Serial.println("Exiting connectToGuest() after successful connection.");
+    readMacAddress();
+
+    HTTPClient http;
+    http.begin(LOGON_URL);
+
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    http.addHeader("Connection", "keep-alive");
+    http.addHeader("Content-Length", "10");
+    int httpResponseCode = http.POST("dest=open");
+
+    if (httpResponseCode != 200)
+    {
+        Serial.print("Error on sending POST: ");
+        Serial.println(httpResponseCode);
+    }
+
+    http.end();
 }
 
-bool connectToWifiSimple(char *ssid, char *password)
+bool connectToWifiSimple(const char *ssid, const char *password)
 {
     Serial.println("Connecting to Wi-Fi...");
 
@@ -64,7 +85,7 @@ bool connectToWifiSimple(char *ssid, char *password)
     return true;
 }
 
-void connectToWifiEnterprise(char *ssid, char *username, char *password)
+void connectToWifiEnterprise(const char *ssid, const char *username, const char *password)
 {
     WiFi.mode(WIFI_STA);
 

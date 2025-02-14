@@ -1,5 +1,6 @@
 #include "NimBLEDevice.h"
 #include "dotenv.h"
+#include <DelayProgressBar.h>
 
 NimBLEScan *pBLEScan;
 
@@ -16,7 +17,8 @@ int countDevices(int duration)
 
     pBLEScan->start(duration, false, true);
 
-    delay(duration);
+    // delay(duration);
+    delayProgressBar(duration, "Scan Progress", 64);
 
     int devices = pBLEScan->getResults().getCount();
 
@@ -25,25 +27,3 @@ int countDevices(int duration)
 
     return devices;
 }
-
-// #include <BLE.h>
-
-// #include <BLEDevice.h>
-// #include <BLEScan.h>
-// #include <Arduino.h>
-
-// BLEScan *scan;
-
-// void initBLE()
-// {
-//     BLEDevice::init("");
-//     scan = BLEDevice::getScan();
-//     scan->setActiveScan(true);
-// }
-
-// // call init before use
-// int countDevices(int duration)
-// {
-//     BLEScanResults foundDevices = scan->start(duration, false); // Scan for 5 seconds
-//     return foundDevices.getCount();
-// }

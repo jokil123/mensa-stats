@@ -1,4 +1,6 @@
-#pragma once
+#include "States.h"
+#include <Arduino.h>
+#include <wifi/WifiConnect.h>
 
 void stateConnecting(Context *ctx)
 {

@@ -7,4 +7,4 @@ enum PostError
     CONNECTION_ERROR,
 };
 
-PostError postOccupancy(char *api_url, char *device, char *token, int occupancy);
+PostError postOccupancy(const char *api_url, const char *device, const char *token, int occupancy);

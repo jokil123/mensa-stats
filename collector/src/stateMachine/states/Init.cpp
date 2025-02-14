@@ -1,4 +1,6 @@
-#pragma once
+#include "States.h"
+#include <Arduino.h>
+#include <ble/BLE.h>
 
 void stateInit(Context *ctx)
 {
