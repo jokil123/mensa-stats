@@ -3,7 +3,7 @@
 #include <HTTPClient.h>
 #include <VarExpand.h>
 
-int postOccupancy(char *api_url, char *device, char *token, int occupancy)
+PostError postOccupancy(char *api_url, char *device, char *token, int occupancy)
 {
     HTTPClient http;
 
@@ -20,24 +20,42 @@ int postOccupancy(char *api_url, char *device, char *token, int occupancy)
 
     // Serial.println(buffer);
 
-    int httpResponseCode = http.POST(buffer); // Send the actual POST request
+    int httpResponseCode;
+
+    try
+    {
+        httpResponseCode = http.POST(buffer); // Send the actual POST request
+    }
+    catch (const std::exception &e)
+    {
+        Serial.println(e.what());
+        http.end();
+        return FATAL_ERROR;
+    }
 
     if (httpResponseCode == 200)
     {
-        // Serial.println("Post Ok");
+        Serial.println("Post Ok");
     }
     else if (httpResponseCode > 0)
     {
         Serial.print("Non 200 Response: ");
         Serial.println(httpResponseCode); // Print return code
+        http.end();
+        return FATAL_ERROR;
+    }
+    else if (httpResponseCode == -1)
+    {
+        http.end();
+        return CONNECTION_ERROR;
     }
     else
     {
         Serial.print("Error on sending POST: ");
         Serial.println(httpResponseCode);
+        Serial.println(http.errorToString(httpResponseCode));
     }
 
     http.end();
-
-    return httpResponseCode;
+    return NO_ERROR;
 }
