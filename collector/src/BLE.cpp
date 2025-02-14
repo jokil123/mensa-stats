@@ -1,17 +1,49 @@
-#include <BLE.h>
+#include "NimBLEDevice.h"
+#include "dotenv.h"
 
-#include <BLEDevice.h>
-#include <BLEScan.h>
-#include <Arduino.h>
+NimBLEScan *pBLEScan;
 
-// not efficient but I dont have enough mem to do init at the start
+void initBLE()
+{
+    NimBLEDevice::init(DEVICE);
+    pBLEScan = NimBLEDevice::getScan();
+}
+
 int countDevices(int duration)
 {
-    BLEDevice::init("");
-    BLEScan *scan = BLEDevice::getScan();
-    scan->setActiveScan(true);
+    pBLEScan->setActiveScan(true);
+    pBLEScan->setDuplicateFilter(1);
 
-    BLEScanResults foundDevices = scan->start(duration, false); // Scan for 5 seconds
-    return foundDevices.getCount();
-    BLEDevice::deinit(true);
+    pBLEScan->start(duration, false, true);
+
+    delay(duration);
+
+    int devices = pBLEScan->getResults().getCount();
+
+    pBLEScan->clearResults();
+    pBLEScan->stop();
+
+    return devices;
 }
+
+// #include <BLE.h>
+
+// #include <BLEDevice.h>
+// #include <BLEScan.h>
+// #include <Arduino.h>
+
+// BLEScan *scan;
+
+// void initBLE()
+// {
+//     BLEDevice::init("");
+//     scan = BLEDevice::getScan();
+//     scan->setActiveScan(true);
+// }
+
+// // call init before use
+// int countDevices(int duration)
+// {
+//     BLEScanResults foundDevices = scan->start(duration, false); // Scan for 5 seconds
+//     return foundDevices.getCount();
+// }

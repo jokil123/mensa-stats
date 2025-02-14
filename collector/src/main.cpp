@@ -3,30 +3,33 @@
 #include "WifiConnect.h"
 #include "dotenv.h"
 #include "BLE.h"
+#include "Util.h"
 
 void setup()
 {
     Serial.begin(115200);
 
-    printHeapUsage();
-    // initBLE();
-    // printHeapUsage();
-
-    Serial.println("Connecting to wifi");
+    Serial.println("Connecting to wifi...");
     connectToGuest();
     Serial.println("Connected to wifi");
-    printHeapUsage();
 
-    Serial.println("Scaning devices");
-    int devices = countDevices(10);
-    Serial.println("Devices scanned");
-    Serial.println(devices);
-    printHeapUsage();
+    initBLE();
 
-    Serial.println("Posting data");
-    int status = postOccupancy("https://mensa-stats.joshualung.com/", DEVICE, TOKEN, devices);
-    Serial.println("Data posted");
-    printHeapUsage();
+    for (int i = 0; i < 10; i++)
+    {
+        Serial.println("Scaning devices...");
+        int devices = countDevices(5 * 60 * 1000);
+        Serial.print(devices);
+        Serial.println(" devices scanned successfully");
+        // printHeapUsage();
+
+        Serial.println("Posting data...");
+        int status = postOccupancy("https://mensa-stats.joshualung.com", DEVICE, TOKEN, devices);
+        Serial.println("Data posted sucessfully");
+        // printHeapUsage();
+    }
+
+    // printHeapUsage();
 }
 
 long backoff = 1000;
