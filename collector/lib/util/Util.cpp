@@ -58,13 +58,12 @@ int max(int a, int b)
     }
 }
 
-char *randomString(int length)
+// This implmentation used to cause a memory leak
+void randomString(char *buf, int length)
 {
-    char *str = new char[length + 1];
     for (int i = 0; i < length; i++)
     {
-        str[i] = random(0, 26) + 'a';
+        buf[i] = random(0, 26) + 'a';
     }
-    str[length] = '\0';
-    return str;
+    buf[length] = '\0';
 }
