@@ -5,27 +5,41 @@
 #include <esp_wpa2.h> // This is for WPA2 Enterprise connections
 #include <esp_wifi.h>
 #include <HTTPClient.h>
+#include <Util.h>
 
 #define WIFI_SSID "RWTH-guests"
 #define LOGON_URL "https://access.wlan.rwth-aachen.de/login.php"
 
 void connectToGuest()
 {
-    Serial.println("Connecting to RWTH Guest Network");
+    Serial.println("Connecting to RWTH Guest Network...");
 
     WiFi.disconnect();
-    delay(1000);
+    Serial.print("Disconnecting: ");
+    while (WiFi.status() == WL_CONNECTED)
+    {
+        Serial.print(".");
+        delay(1000);
+    }
+    Serial.println();
+
+    // WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
+    // WiFi.setHostname(randomString(10));
+    WiFi.setHostname(randomString(10));
     WiFi.mode(WIFI_STA);
-    WiFi.begin();
+
+    // WiFi.hostname("a");
+    // WiFi.begin();
+    WiFi.setAutoReconnect(false);
 
     uint8_t mac[6] = {(random(0, 255) << 1), random(0, 255), random(0, 255), random(0, 255), random(0, 255), random(0, 255)};
-    printMac(mac);
 
     esp_err_t err = esp_wifi_set_mac(WIFI_IF_STA, mac);
 
     if (err == ESP_OK)
     {
         Serial.println("Success changing Mac Address: ");
+        printMac(mac);
     }
     else
     {
@@ -34,20 +48,31 @@ void connectToGuest()
     }
 
     WiFi.begin(WIFI_SSID);
-    WiFi.setAutoReconnect(true);
 
+    Serial.print("Waiting for connection: ");
+    int remainingAttempts = 30;
     while (WiFi.status() != WL_CONNECTED)
     {
+        if (remainingAttempts == 0)
+        {
+            Serial.println("Failed to connect to RWTH Guest Network");
+            return;
+        }
+
         Serial.print(WiFi.status());
         Serial.print(" ");
+        remainingAttempts--;
         delay(1000);
     }
     Serial.println();
 
-    Serial.println("Connected Sucessfully");
+    Serial.println("Connected Sucessfully: ");
     Serial.println(WiFi.localIP());
+    Serial.println(WiFi.getTxPower());
+    Serial.println(WiFi.RSSI());
+    Serial.println(WiFi.getHostname());
 
-    readMacAddress();
+    Serial.println("Sending POST request to logon...");
 
     HTTPClient http;
     http.begin(LOGON_URL);
@@ -61,6 +86,10 @@ void connectToGuest()
     {
         Serial.print("Error on sending POST: ");
         Serial.println(httpResponseCode);
+    }
+    else
+    {
+        Serial.println("Logon successful");
     }
 
     http.end();

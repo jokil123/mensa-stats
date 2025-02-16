@@ -35,7 +35,7 @@ PostError postOccupancy(const char *api_url, const char *device, const char *tok
 
     if (httpResponseCode == 200)
     {
-        Serial.println("Post Ok");
+        // Serial.println("Post Ok");
     }
     else if (httpResponseCode > 0)
     {
