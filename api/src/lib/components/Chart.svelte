@@ -2,7 +2,11 @@
 	import { onMount } from 'svelte';
 	import Chart, { type ChartConfiguration } from 'chart.js/auto';
 	import 'chartjs-adapter-moment';
-	import type { HistoryPoint } from '$lib/db/occupancy';
+	import type { HistoryPoint } from '$lib/scripts/db/occupancy';
+	import { cursorPlugin } from '$lib/scripts/db/chartjsCursor';
+
+	let chartGridColor = 'rgba(255,255,255,0.3)';
+	let chartLabelColor = '#d1d5db';
 
 	type Props = {
 		history: HistoryPoint[];
@@ -30,8 +34,8 @@
 				backgroundColor: 'rgb(50, 168, 82, 0.2)',
 				fill: false,
 				data: [],
-				lineTension: 0.5
-				// pointRadius: 1
+				lineTension: 0.5,
+				pointRadius: 2
 			}
 		]
 	};
@@ -39,7 +43,13 @@
 	const config: ChartConfiguration = {
 		type: 'line',
 		data,
+		plugins: [cursorPlugin],
 		options: {
+			plugins: {
+				cursor: {
+					color: 'white'
+				}
+			},
 			interaction: {
 				mode: 'x',
 				intersect: true,
@@ -50,9 +60,12 @@
 			maintainAspectRatio: false,
 			scales: {
 				x: {
+					grid: {
+						color: chartGridColor
+					},
 					type: 'time', // Use time scale
 					time: {
-						unit: 'hour', // Adjust the time unit (hour, minute, day)
+						unit: 'day', // Adjust the time unit (hour, minute, day)
 						tooltipFormat: 'll HH:mm', // Date format in tooltips
 						displayFormats: {
 							hour: 'MMM D, HH:mm' // Display format of time labels
@@ -60,14 +73,25 @@
 					},
 					title: {
 						display: true,
-						text: 'Zeit'
+						text: 'Zeit',
+						color: chartLabelColor
+					},
+					ticks: {
+						color: chartLabelColor
 					}
 				},
 				y: {
+					grid: {
+						color: chartGridColor
+					},
 					beginAtZero: true,
 					title: {
 						display: true,
-						text: 'Geräte'
+						text: 'Geräte',
+						color: chartLabelColor
+					},
+					ticks: {
+						color: chartLabelColor
 					}
 				}
 			}

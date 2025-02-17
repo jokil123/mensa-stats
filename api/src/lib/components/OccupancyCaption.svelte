@@ -8,7 +8,7 @@
 		{ p: 0.7, c: 'Europapark Anstehen' },
 		{ p: 0.8, c: 'Schlange Stehen Simulator' },
 		{ p: 0.9, c: 'Maschi Party' },
-		{ p: 1, c: 'Travis Scott 2021' }
+		{ p: 1.0, c: 'Travis Scott 2021' }
 	];
 
 	let selected = $derived(

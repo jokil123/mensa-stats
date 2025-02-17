@@ -1,4 +1,10 @@
+import { timeStamp } from 'console';
 import mongo from './mongo';
+
+export type HistoryPoint = {
+	timestamp: Date;
+	occupancy: number;
+};
 
 // Saves an occupancy entry to the db
 export async function saveOccupancyEntry(device: string, occupancy: number) {
@@ -16,7 +22,7 @@ export async function saveOccupancyEntry(device: string, occupancy: number) {
 }
 
 // Gets the most recent occupancy entry by device
-export async function getOccupancy(device: string): Promise<number | null> {
+export async function getOccupancy(device: string): Promise<HistoryPoint | null> {
 	const collection = mongo().collection('occupancy');
 
 	const mostRecent = await collection
@@ -30,29 +36,25 @@ export async function getOccupancy(device: string): Promise<number | null> {
 		return null;
 	}
 
-	return mostRecent[0].occupancy;
+	return {
+		timestamp: mostRecent[0].timestamp,
+		occupancy: mostRecent[0].occupancy
+	};
 }
 
 // Gets the maximum Occupancy during the last s seconds
-export async function getOccupancyMax(device: string, s: number): Promise<number | null> {
+export async function getOccupancyMax(device: string, s: number): Promise<HistoryPoint | null> {
 	const now = new Date();
 
 	const max = await mongo()
 		.collection('occupancy')
-		.aggregate([
-			{
-				$match: {
-					timestamp: { $gte: new Date(now.getTime() - s * 1000) },
-					'metadata.device': { $eq: device }
-				}
-			},
-			{
-				$group: {
-					_id: null,
-					maxValue: { $max: '$occupancy' }
-				}
-			}
-		])
+		.find()
+		.filter({
+			timestamp: { $gte: new Date(now.getTime() - s * 1000) },
+			'metadata.device': { $eq: device }
+		})
+		.sort({ occupancy: -1 })
+		.limit(1)
 		.toArray();
 
 	if (max.length != 1) {
@@ -61,29 +63,25 @@ export async function getOccupancyMax(device: string, s: number): Promise<number
 		return await getOccupancy(device);
 	}
 
-	return max[0].maxValue as number;
+	return {
+		timestamp: max[0].timestamp,
+		occupancy: max[0].occupancy
+	};
 }
 
 // Gets the minimum Occupancy during the last s seconds
-export async function getOccupancyMin(device: string, s: number): Promise<number | null> {
+export async function getOccupancyMin(device: string, s: number): Promise<HistoryPoint | null> {
 	const now = new Date();
 
 	const min = await mongo()
 		.collection('occupancy')
-		.aggregate([
-			{
-				$match: {
-					timestamp: { $gte: new Date(now.getTime() - s * 1000) },
-					'metadata.device': { $eq: device }
-				}
-			},
-			{
-				$group: {
-					_id: null,
-					maxValue: { $min: '$occupancy' }
-				}
-			}
-		])
+		.find()
+		.filter({
+			timestamp: { $gte: new Date(now.getTime() - s * 1000) },
+			'metadata.device': { $eq: device }
+		})
+		.sort({ occupancy: 1 })
+		.limit(1)
 		.toArray();
 
 	if (min.length != 1) {
@@ -92,13 +90,11 @@ export async function getOccupancyMin(device: string, s: number): Promise<number
 		return await getOccupancy(device);
 	}
 
-	return min[0].maxValue as number;
+	return {
+		timestamp: min[0].timestamp,
+		occupancy: min[0].occupancy
+	};
 }
-
-export type HistoryPoint = {
-	timestamp: Date;
-	occupancy: number;
-};
 
 // gets all occupancy datapoints of the last s seconds and averages data over binSize minutes
 export async function getAveragedOccupancyHistory(

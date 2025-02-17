@@ -1,4 +1,4 @@
-import { start_mongo } from '$lib/db/mongo';
+import { start_mongo } from '$lib/scripts/db/mongo';
 import 'dotenv/config';
 
 try {

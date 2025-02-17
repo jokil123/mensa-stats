@@ -1,5 +1,5 @@
-import { authorizeDevice } from '$lib/db/authorize';
-import { saveOccupancyEntry } from '$lib/db/occupancy';
+import { authorizeDevice } from '$lib/scripts/db/authorize';
+import { saveOccupancyEntry } from '$lib/scripts/db/occupancy';
 import { error, type RequestEvent } from '@sveltejs/kit';
 import { Ajv } from 'ajv';
 
@@ -36,7 +36,7 @@ export async function POST({ request }: RequestEvent) {
 	console.log(json);
 
 	if (!(await authorizeDevice(json.device, json.token))) {
-		error(401, 'You are not authorized for this stupid fucker!');
+		error(401, 'You are not authorized for this, nice try though lol');
 	}
 
 	await saveOccupancyEntry(json.device, json.occupancy);
