@@ -22,6 +22,13 @@ void printHeapUsage()
     Serial.println();
 }
 
+void printStackUsage()
+{
+    uint32_t freeStack = uxTaskGetStackHighWaterMark(NULL);
+    Serial.print("Free stack: ");
+    Serial.println(freeStack);
+}
+
 float min(float a, float b)
 {
     if (a < b)
@@ -59,11 +66,28 @@ int max(int a, int b)
 }
 
 // This implmentation used to cause a memory leak
-void randomString(char *buf, int length)
+
+void randomString(char *buf, size_t buf_size)
 {
-    for (int i = 0; i < length; i++)
+    if (buf == NULL || buf_size == 0)
     {
-        buf[i] = random(0, 26) + 'a';
+        return; // Handle invalid input, or perhaps return an error code in real embedded system
     }
-    buf[length] = '\0';
+
+    size_t i = 0;
+    // Generate characters until buffer is almost full (leave space for null terminator)
+    while (i < buf_size - 1)
+    {
+        // Generate a random number between 0 and 25 (inclusive)
+        long randomNumber = random(0, 25);
+
+        // Convert the random number to a lowercase letter 'a' to 'z'
+        char randomChar = 'a' + (char)randomNumber;
+
+        buf[i] = randomChar;
+        i++;
+    }
+
+    // Null-terminate the string to make it a valid C string
+    buf[i] = '\0';
 }

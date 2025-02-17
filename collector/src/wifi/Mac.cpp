@@ -3,6 +3,9 @@
 #include <esp_wifi.h>
 #include <Util.h>
 #include <WiFi.h>
+#include "WifiUtil.h"
+
+#define HOSTNAME_BUFFER_SIZE 10
 
 void readMacAddress()
 {
@@ -33,22 +36,28 @@ void printMac(uint8_t mac[6])
     Serial.println();
 }
 
-// void randomizeDeviceId()
-// {
-//     WiFi.setHostname(randomString(10));
+// Generates a random hostname and MAC address for the ESP32
+// This will cut the connection to the current network and reinitialize the WiFi
+bool randomizeDeviceId()
+{
+    WiFi.disconnect(true, true);
+    tryBlockUntilDisconnected();
 
-//     uint8_t mac[6] = {(random(0, 255) << 1), random(0, 255), random(0, 255), random(0, 255), random(0, 255), random(0, 255)};
+    char hostnameBuffer[HOSTNAME_BUFFER_SIZE]; // This used to be defined as a top-level variable, but that caused a memory corruption issue
+    randomString(hostnameBuffer, HOSTNAME_BUFFER_SIZE);
+    WiFi.setHostname(hostnameBuffer);
 
-//     esp_err_t err = esp_wifi_set_mac(WIFI_IF_STA, mac);
+    WiFi.begin();
 
-//     if (err == ESP_OK)
-//     {
-//         Serial.println("Success changing Mac Address: ");
-//         printMac(mac);
-//     }
-//     else
-//     {
-//         Serial.print("Error changing Mac Address: ");
-//         Serial.println(err);
-//     }
-// }
+    uint8_t mac[6] = {(random(0, 255) << 1), random(0, 255), random(0, 255), random(0, 255), random(0, 255), random(0, 255)};
+    esp_err_t err = esp_wifi_set_mac(WIFI_IF_STA, mac);
+
+    if (err != ESP_OK)
+    {
+        Serial.print("Error changing Mac Address: ");
+        Serial.println(err);
+        return false;
+    }
+
+    return true;
+}
