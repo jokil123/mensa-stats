@@ -31,7 +31,7 @@
 		Falls ihr weitere Ideen habt, was man cooles mit den Daten machen kann, gerne einfach ne Email schreiben!
 	</p>
 	<br />
-	<p class="font-bold">Naja, made with Hate and Spite in Svelte & C++ {'<3'}</p>
+	<p class="mb-10 font-bold">Naja, made with Hate and Spite in Svelte & C++ {'<3'}</p>
 </MarginBox>
 
 <Footer />

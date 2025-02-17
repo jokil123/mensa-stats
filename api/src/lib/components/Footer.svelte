@@ -14,7 +14,7 @@
 	style="background-color: rgb(2,2,6);"
 >
 	<MarginBox>
-		<div class="flex items-center justify-center gap-10 font-bold">
+		<div class="flex flex-col items-center justify-center gap-10 font-bold md:flex-row">
 			<a href="/info">Info</a>
 			<a href="https://github.com/jokil123/mensa-stats" class="flex items-center gap-1">
 				GitHub

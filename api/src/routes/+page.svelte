@@ -17,7 +17,7 @@
 </svelte:head>
 
 <MarginBox>
-	<div class="mb-32 text-center">
+	<div class="mb-20 text-center">
 		<h1 class="mb-8 text-5xl font-bold text-white">Mensa Stats</h1>
 
 		<h2 class="">Momentane Belegung:</h2>
@@ -32,10 +32,16 @@
 		</div>
 		<p class="mb-8">Bluetooth Geräte</p>
 
+		<Gauge min={data.min.occupancy} max={data.max.occupancy} current={data.occupancy.occupancy} />
+
+		<h3 class="mb-10 text-center text-xl font-bold italic">
+			Wie <OccupancyCaption p={percentage} />
+		</h3>
+
 		<div class="mb-5 flex items-center justify-center gap-7">
 			<div class="flex items-center justify-center gap-4">
 				<div
-					class="h-7 w-7 rounded-full {isAlive
+					class="h-5 w-5 rounded-full {isAlive
 						? 'bg-green-500'
 						: 'bg-red-500'} outline outline-offset-2"
 				></div>
@@ -59,10 +65,6 @@
 				</p>
 			</div>
 		</div>
-
-		<Gauge min={data.min.occupancy} max={data.max.occupancy} current={data.occupancy.occupancy} />
-
-		<h3 class="text-center text-xl font-bold italic">Wie <OccupancyCaption p={percentage} /></h3>
 	</div>
 </MarginBox>
 

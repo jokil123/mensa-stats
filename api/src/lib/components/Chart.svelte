@@ -32,9 +32,9 @@
 				label: 'Belegung',
 				borderColor: 'rgb(50, 168, 82)',
 				backgroundColor: 'rgb(50, 168, 82, 0.2)',
-				fill: false,
+				fill: true,
 				data: [],
-				lineTension: 0.5,
+				lineTension: 0.3,
 				pointRadius: 2
 			}
 		]
@@ -52,10 +52,11 @@
 			},
 			interaction: {
 				mode: 'x',
-				intersect: true,
+				intersect: false,
 				includeInvisible: true,
 				axis: 'xy'
 			},
+			color: chartLabelColor,
 			responsive: true,
 			maintainAspectRatio: false,
 			scales: {

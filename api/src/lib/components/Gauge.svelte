@@ -11,8 +11,6 @@
 
 	let gauge: any;
 
-	let percentage = $derived((current - min) / (max - min));
-
 	function valP(p: number) {
 		return min + p * (max - min);
 	}
@@ -62,8 +60,8 @@
 	});
 </script>
 
-<div>
-	<canvas id="gauge" style="width:100%;"></canvas>
+<div class="flex justify-center">
+	<canvas id="gauge" style="width:100%;" class="max-w-[50rem]"></canvas>
 </div>
 
 <style>
