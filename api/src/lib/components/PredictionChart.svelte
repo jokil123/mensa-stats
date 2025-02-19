@@ -27,11 +27,12 @@
 	);
 
 	let prediction: HistoryPoint[] = $derived.by(() => {
-		let mostRecentHistory = [...last24h].sort((a, b) => b.occupancy - a.occupancy)[0];
+		let mostRecentHistory = [...last24h].sort((a, b) => a.occupancy + b.occupancy)[0];
 		let oldestOneWeekAgo = [...oneWeekAgo].sort((a, b) => b.occupancy - a.occupancy)[0];
 
+		console.log(oneWeekAgo, mostRecentHistory, oldestOneWeekAgo);
+
 		let scalingFactor = mostRecentHistory.occupancy / oldestOneWeekAgo.occupancy;
-		// console.log(mostRecentHistory.occupancy, oldestOneWeekAgo.occupancy);
 
 		let prediction = oneWeekAgo.map((h) => {
 			return {

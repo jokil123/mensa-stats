@@ -47,17 +47,6 @@
 	}
 
 	function getColor(day: string, time: number): string {
-		// let minC = rgb_to_oklab({ r: 34, g: 197, b: 94 });
-		// let maxC = rgb_to_oklab({ r: 239, g: 68, b: 68 });
-		// if (!dataAvailable(day, time)) return `rgb(70, 70, 70)`;
-		// let p = (getData(day, time).occupancy - min) / (max - min);
-		// let mixC = {
-		// 	L: lerp(minC.L, maxC.L, p),
-		// 	a: lerp(minC.a, maxC.a, p),
-		// 	b: lerp(minC.b, maxC.b, p)
-		// };
-		// return oklab_to_css_string(mixC);
-
 		if (!dataAvailable(day, time)) return `#111827`;
 
 		let palette = ['#21c25d', '#84c04f', '#d4b53b', '#ffa340', '#ef4444'];
@@ -66,12 +55,19 @@
 
 		return palette[Math.round(paletteIndex)];
 	}
+
+	let width = $state(0);
+	let compact: boolean = $derived(width < 640);
+	let gridCols = $derived(compact);
 </script>
 
+<svelte:window bind:innerWidth={width} />
+
 <div
-	class="grid items-center justify-center justify-items-center gap-1 sm:gap-2"
-	style="grid-template-columns: repeat({times.length +
-		1}, min-content); grid-template-rows: repeat({days.length + 1}, min-content)"
+	class="grid items-center justify-center justify-items-center gap-1 sm:gap-2 {compact
+		? 'grid-flow-col'
+		: 'grid-flow-row'}"
+	style="grid-template-{compact ? 'rows' : 'columns'}: repeat({times.length + 1}, min-content);"
 >
 	<div>
 		<!-- Corner -->
