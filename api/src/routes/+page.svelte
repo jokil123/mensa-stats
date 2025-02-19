@@ -4,6 +4,8 @@
 	import MarginBox from '$lib/components/MarginBox.svelte';
 	import OccupancyCaption from '$lib/components/OccupancyCaption.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import WeekChart from '$lib/components/WeekChart.svelte';
+	import PredictionChart from '$lib/components/PredictionChart.svelte';
 
 	let { data } = $props();
 
@@ -70,12 +72,28 @@
 
 <div class="bg-gray-950 py-16">
 	<MarginBox>
-		<div class="mb-10 text-center">
+		<div class="mb-8 text-center">
 			<h2 class="text-3xl font-bold">Statistik</h2>
 			<p class="text-gray-400">Belegung der letzten sieben Tage</p>
 		</div>
-		<div class="h-72">
+		<div class="mb-16 h-72">
 			<Chart history={data.averagedHistory} />
+		</div>
+
+		<div class="mb-8 text-center">
+			<h2 class="text-3xl font-bold">Vorhersage</h2>
+			<p class="text-gray-400">Vorhersage der Belegung anhand vorheriger Daten</p>
+		</div>
+		<div class="mb-16">
+			<PredictionChart history={data.averagedHistory} />
+		</div>
+
+		<div class="mb-8 text-center">
+			<h2 class="text-3xl font-bold">Wochentage</h2>
+			<p class="text-gray-400">Belegung pro Wochentag</p>
+		</div>
+		<div>
+			<WeekChart history={data.averagedHistory} />
 		</div>
 	</MarginBox>
 </div>

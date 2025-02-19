@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import Chart, { type ChartConfiguration } from 'chart.js/auto';
-	import 'chartjs-adapter-moment';
-	import type { HistoryPoint } from '$lib/scripts/db/occupancy';
 	import { cursorPlugin } from '$lib/scripts/chartjsCursor';
+	import type { HistoryPoint } from '$lib/scripts/db/occupancy';
+
+	import Chart, { type ChartConfiguration } from 'chart.js/auto';
+	import { onMount } from 'svelte';
 
 	let chartGridColor = 'rgba(255,255,255,0.3)';
 	let chartLabelColor = '#d1d5db';
@@ -12,16 +12,49 @@
 		history: HistoryPoint[];
 	};
 	let { history }: Props = $props();
-	let dataPoints = $derived(
-		history
-			? history.map((h) => {
-					return {
-						x: h.timestamp,
-						y: h.occupancy
-					};
-				})
-			: []
+
+	let last24h: HistoryPoint[] = $derived(
+		history.filter((h) => Date.now() - h.timestamp.getTime() < 24 * 60 * 60 * 1000)
 	);
+
+	let oneWeekAgo: HistoryPoint[] = $derived(
+		history.filter((h) => {
+			let oldest = Date.now() - 7 * 24 * 60 * 60 * 1000;
+			let newest = Date.now() - 6 * 24 * 60 * 60 * 1000;
+
+			return oldest < h.timestamp.getTime() && h.timestamp.getTime() < newest;
+		})
+	);
+
+	let prediction: HistoryPoint[] = $derived.by(() => {
+		let mostRecentHistory = [...last24h].sort((a, b) => b.occupancy - a.occupancy)[0];
+		let oldestOneWeekAgo = [...oneWeekAgo].sort((a, b) => b.occupancy - a.occupancy)[0];
+
+		let scalingFactor = mostRecentHistory.occupancy / oldestOneWeekAgo.occupancy;
+		// console.log(mostRecentHistory.occupancy, oldestOneWeekAgo.occupancy);
+
+		let prediction = oneWeekAgo.map((h) => {
+			return {
+				occupancy: h.occupancy * scalingFactor,
+				timestamp: new Date(h.timestamp.getTime() + 7 * 24 * 60 * 60 * 1000)
+			};
+		});
+
+		return [mostRecentHistory, ...prediction];
+	});
+
+	const toDataPoints = (historyPoints: HistoryPoint[]) => {
+		if (!historyPoints) {
+			return [];
+		}
+
+		return historyPoints.map((h) => {
+			return {
+				x: h.timestamp,
+				y: h.occupancy
+			};
+		});
+	};
 
 	let chart: Chart;
 	let canvas: HTMLCanvasElement;
@@ -36,6 +69,17 @@
 				data: [],
 				lineTension: 0.3,
 				pointRadius: 2
+			},
+			{
+				label: 'Geräte Vorhersage',
+				borderColor: 'rgb(68, 139, 239)',
+				backgroundColor: 'rgb(68, 139, 239, 0.2)',
+				// backgroundColor: draw('diagonal', '#ffffff', undefined, 10),
+				fill: true,
+				data: [],
+				lineTension: 0.3,
+				pointRadius: 2,
+				borderDash: [10, 5]
 			}
 		]
 	};
@@ -69,10 +113,10 @@
 					},
 					type: 'time', // Use time scale
 					time: {
-						unit: 'day', // Adjust the time unit (hour, minute, day)
+						unit: 'hour', // Adjust the time unit (hour, minute, day)
 						tooltipFormat: 'll HH:mm', // Date format in tooltips
 						displayFormats: {
-							hour: 'MMM D, HH:mm' // Display format of time labels
+							hour: 'HH:mm' // Display format of time labels
 						}
 					},
 					title: {
@@ -117,7 +161,8 @@
 	// }
 
 	$effect(() => {
-		chart.data.datasets[0].data = dataPoints;
+		chart.data.datasets[0].data = toDataPoints(last24h);
+		chart.data.datasets[1].data = toDataPoints(prediction);
 		// console.log(chart.data.datasets[0].data);
 		chart.update();
 	});

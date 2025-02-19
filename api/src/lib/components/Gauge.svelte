@@ -25,9 +25,9 @@
 		// Create gauge options
 		const options = {
 			staticZones: [
-				{ strokeStyle: '#27b34d', min: min, max: valP(0.3) }, // Green
+				{ strokeStyle: '#22c55e', min: min, max: valP(0.3) }, // Green
 				{ strokeStyle: '#505f73', min: valP(0.3), max: valP(0.7) },
-				{ strokeStyle: '#F03E3E', min: valP(0.7), max: max } // Red
+				{ strokeStyle: '#ef4444', min: valP(0.7), max: max } // Red
 			],
 			angle: -0.2, // The span of the gauge arc
 			lineWidth: 0.2, // The line thickness
