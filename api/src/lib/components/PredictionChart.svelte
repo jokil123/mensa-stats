@@ -28,7 +28,8 @@
 
 	let prediction: HistoryPoint[] = $derived.by(() => {
 		let mostRecentHistory = [...last24h].sort((a, b) => a.occupancy + b.occupancy)[0];
-		let oldestOneWeekAgo = [...oneWeekAgo].sort((a, b) => b.occupancy - a.occupancy)[0];
+		let oldestOneWeekAgo =
+			[...oneWeekAgo].sort((a, b) => b.occupancy - a.occupancy)[0] || mostRecentHistory;
 
 		console.log(oneWeekAgo, mostRecentHistory, oldestOneWeekAgo);
 
