@@ -17,7 +17,7 @@
 			? history.map((h) => {
 					return {
 						x: h.timestamp,
-						y: h.occupancy
+						y: h.occupancy.toFixed(0)
 					};
 				})
 			: []

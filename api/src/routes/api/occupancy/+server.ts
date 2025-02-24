@@ -33,7 +33,7 @@ export async function POST({ request }: RequestEvent) {
 		error(400, 'Malformed data!');
 	}
 
-	console.log(json);
+	// console.log(json);
 
 	if (!(await authorizeDevice(json.device, json.token))) {
 		error(401, 'You are not authorized for this, nice try though lol');
