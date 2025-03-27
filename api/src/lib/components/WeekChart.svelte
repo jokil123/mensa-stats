@@ -7,9 +7,22 @@
 	type Props = {
 		history: HistoryPoint[];
 	};
-	let { history }: Props = $props();
+	let props: Props = $props();
+	let history = $derived(filterHistory(props.history));
+
+	function filterHistory(hist: HistoryPoint[]): HistoryPoint[] {
+		if (!hist) {
+			return [];
+		}
+
+		return hist.filter((h) => {
+			let time = h.timestamp.getHours();
+			return times.includes(time);
+		});
+	}
+
 	let min = $derived(Math.min(...history.map((h) => h.occupancy)));
-	let max = $derived(Math.max(...history.map((h) => h.occupancy)));
+	let max = $derived(Math.max(0, ...history.map((h) => h.occupancy)));
 
 	type WeekChartData = { [day: string]: { [time: number]: HistoryPoint } };
 
@@ -51,9 +64,15 @@
 
 		let palette = ['#21c25d', '#84c04f', '#d4b53b', '#ffa340', '#ef4444'];
 		let p = (getData(day, time).occupancy - min) / (max - min);
-		let paletteIndex = p * (palette.length - 1);
+		let paletteIndex = Math.max(0, Math.ceil(p * palette.length) - 1);
 
-		return palette[Math.round(paletteIndex)];
+		return palette[paletteIndex];
+
+		// 0.0 - 0.2 -> 0
+		// 0.2 - 0.4 -> 1
+		// 0.4 - 0.6 -> 2
+		// 0.6 - 0.8 -> 3
+		// 0.8 - 1.0 -> 4
 	}
 
 	let width = $state(0);
