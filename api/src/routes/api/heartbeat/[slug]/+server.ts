@@ -18,7 +18,7 @@ export async function GET({ request }: RequestEvent) {
 		error(503, `Service unavailable, last data point is ${minutes} minutes old`);
 	}
 
-	return new Response(`collector ${collectorId} is alive (${minutes} ago)`, {
+	return new Response(`collector ${collectorId} is alive (${minutes} minutes ago)`, {
 		headers: {
 			'Content-Type': 'text/plain'
 		}
