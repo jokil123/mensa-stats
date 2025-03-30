@@ -4,7 +4,7 @@ import {
 	getOccupancyHistory,
 	getOccupancyMax,
 	getOccupancyMin
-} from '$lib/scripts/db/occupancy.js';
+} from '$lib/scripts/server/db/occupancy.js';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {

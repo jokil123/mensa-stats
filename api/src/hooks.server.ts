@@ -1,5 +1,4 @@
-import { start_mongo } from '$lib/scripts/db/mongo';
-import 'dotenv/config';
+import { start_mongo } from '$lib/scripts/server/db/mongo';
 
 try {
 	await start_mongo();

@@ -1,4 +1,3 @@
-import { timeStamp } from 'console';
 import mongo from './mongo';
 
 export type HistoryPoint = {
