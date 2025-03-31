@@ -41,9 +41,9 @@ export async function POST({ request }: RequestEvent) {
 
 	await saveOccupancyEntry(json.device, json.occupancy);
 
-	console.log(`Measured ${json.occupancy} devices`);
+	console.log(`collector "${json.device}" measured ${json.occupancy} devices`);
 
-	return new Response('Number Received', {
+	return new Response('Number received', {
 		headers: {
 			'Content-Type': 'application/json'
 		}
