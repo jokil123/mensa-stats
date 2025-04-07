@@ -1,13 +1,13 @@
 #include "States.h"
 #include <Arduino.h>
 #include <PostData.h>
-#include <dotenv.h>
+#include <Config.h>
 #include <stateMachine/StateMachine.h>
 
 void statePosting(Context *ctx)
 {
     Serial.println("Posting data...");
-    PostError status = postOccupancy("https://mensa-stats.joshualung.com", DEVICE, TOKEN, ctx->devices);
+    PostError status = postOccupancy(API_URL, DEVICE, TOKEN, ctx->devices);
 
     switch (status)
     {
@@ -21,6 +21,15 @@ void statePosting(Context *ctx)
         break;
     case CONNECTION_ERROR:
         Serial.println("Connection error, reconnecting to wifi...");
+        ctx->state = CONNECTING;
+        break;
+    case READ_TIMEOUT_ERROR:
+        Serial.println("Couldn't reach api, retrying in 10 seconds...");
+        delay(10000);
+        ctx->state = POSTING;
+        break;
+    case GUEST_LOGGED_OUT_ERROR:
+        Serial.println("Trying to reconnect...");
         ctx->state = CONNECTING;
         break;
     }

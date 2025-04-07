@@ -4,10 +4,12 @@
 
 void stateConnecting(Context *ctx)
 {
+    ConnectToGuestError error;
+
     try
     {
         Serial.println("Connecting to wifi...");
-        connectToGuest();
+        error = connectToGuest();
     }
     catch (const std::exception &e)
     {
@@ -15,6 +17,15 @@ void stateConnecting(Context *ctx)
         ctx->state = TERMINATED;
     }
 
-    Serial.println("Connected to wifi");
-    ctx->state = SCANNING;
+    switch (error)
+    {
+    case NO_ERROR:
+        Serial.println("Connected to wifi");
+        ctx->state = SCANNING;
+        break;
+    default:
+        Serial.println("Failed to Connect, Terminating...");
+        ctx->state = TERMINATED;
+        break;
+    }
 }
