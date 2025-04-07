@@ -14,7 +14,7 @@ const validateJSON = new Ajv().compile({
 	properties: {
 		device: { type: 'string' },
 		token: { type: 'string' },
-		occupancy: { type: 'integer' }
+		occupancy: { type: 'number' }
 	},
 	required: ['device', 'token', 'occupancy'],
 	additionalProperties: false
@@ -31,6 +31,10 @@ export async function POST({ request }: RequestEvent) {
 
 	if (!validateJSON(json)) {
 		error(400, 'Malformed data!');
+	}
+
+	if (json.occupancy < 0) {
+		error(400, 'Occupancy may not be negative!');
 	}
 
 	// console.log(json);
