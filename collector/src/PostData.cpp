@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <HTTPClient.h>
 #include <VarExpand.h>
+#include "wifi/WifiUtil.h"
 
 PostError postOccupancy(const char *api_url, const char *device, const char *token, int occupancy)
 {
@@ -12,7 +13,7 @@ PostError postOccupancy(const char *api_url, const char *device, const char *tok
 
     http.begin(urlBuf);
 
-    http.addHeader("Content-Type", "Content-Type: application/json");
+    http.addHeader("Content-Type", "application/json");
 
     char buffer[256];
 
@@ -24,7 +25,9 @@ PostError postOccupancy(const char *api_url, const char *device, const char *tok
 
     try
     {
+        collectHeaders(http);
         httpResponseCode = http.POST(buffer); // Send the actual POST request
+        printHeaders(http);
     }
     catch (const std::exception &e)
     {
@@ -37,10 +40,25 @@ PostError postOccupancy(const char *api_url, const char *device, const char *tok
     {
         // Serial.println("Post Ok");
     }
+    else if (httpResponseCode == 302)
+    {
+        http.end();
+
+        if (http.header("Location") == "https://access.wlan.rwth-aachen.de/")
+        {
+            Serial.println("Logged out from guest WIFI");
+
+            return GUEST_LOGGED_OUT_ERROR;
+        }
+
+        Serial.println("HTTP 302 Found");
+        return FATAL_ERROR;
+    }
     else if (httpResponseCode > 0)
     {
         Serial.print("Non 200 Response: ");
         Serial.println(httpResponseCode); // Print return code
+        Serial.println(http.errorToString(httpResponseCode));
         http.end();
         return FATAL_ERROR;
     }
@@ -54,6 +72,7 @@ PostError postOccupancy(const char *api_url, const char *device, const char *tok
         Serial.print("Error on sending POST: ");
         Serial.println(httpResponseCode);
         Serial.println(http.errorToString(httpResponseCode));
+        return READ_TIMEOUT_ERROR;
     }
 
     http.end();
