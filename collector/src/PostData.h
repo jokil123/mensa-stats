@@ -10,4 +10,4 @@ enum PostError
     GUEST_LOGGED_OUT_ERROR
 };
 
-PostError postOccupancy(const char *api_url, const char *device, const char *token, int occupancy);
+PostError postOccupancy(const char *api_url, const char *device, const char *token, float occupancy);

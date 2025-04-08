@@ -1,3 +1,4 @@
+#include "BLE.h"
 #include "NimBLEDevice.h"
 #include "Config.h"
 #include <DelayProgressBar.h>
@@ -10,20 +11,30 @@ void initBLE()
     pBLEScan = NimBLEDevice::getScan();
 }
 
-int countDevices(int duration)
+// duration per scan
+float countDevices(int duration, int scanCount)
 {
     pBLEScan->setActiveScan(true);
     pBLEScan->setDuplicateFilter(1);
 
-    pBLEScan->start(duration, false, true);
+    printProgressBarHeader("Scan Progress", scanCount);
 
-    // delay(duration);
-    delayProgressBar(duration, "Scan Progress", 64);
+    float acc = 0;
+    for (int i = 0; i < scanCount; i++)
+    {
+        pBLEScan->start(duration, false, true);
+        delay(duration);
 
-    int devices = pBLEScan->getResults().getCount();
+        int devices = pBLEScan->getResults().getCount();
+        acc += devices;
 
-    pBLEScan->clearResults();
-    pBLEScan->stop();
+        pBLEScan->clearResults();
+        pBLEScan->stop();
+        Serial.print("=");
+    }
+    Serial.println("");
 
-    return devices;
+    Serial.println("Scans complete");
+
+    return acc / (float)scanCount;
 }

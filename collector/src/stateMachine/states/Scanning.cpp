@@ -7,8 +7,10 @@ void stateScanning(Context *ctx)
 {
     try
     {
-        Serial.println("Scanning devices...");
-        ctx->devices = countDevices(SCAN_DURATION);
+        Serial.print("Scanning ");
+        Serial.print(SCAN_COUNT);
+        Serial.println(" times...");
+        ctx->devices = countDevices(SCAN_DURATION, SCAN_COUNT);
     }
     catch (const std::exception &e)
     {

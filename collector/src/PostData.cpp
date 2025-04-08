@@ -4,7 +4,7 @@
 #include <VarExpand.h>
 #include "wifi/WifiUtil.h"
 
-PostError postOccupancy(const char *api_url, const char *device, const char *token, int occupancy)
+PostError postOccupancy(const char *api_url, const char *device, const char *token, float occupancy)
 {
     HTTPClient http;
 
@@ -17,7 +17,7 @@ PostError postOccupancy(const char *api_url, const char *device, const char *tok
 
     char buffer[256];
 
-    snprintf(buffer, sizeof(buffer), "{\"device\": \"%s\", \"token\": \"%s\", \"occupancy\": %d}", device, token, occupancy);
+    snprintf(buffer, sizeof(buffer), "{\"device\": \"%s\", \"token\": \"%s\", \"occupancy\": %f}", device, token, occupancy);
 
     // Serial.println(buffer);
 

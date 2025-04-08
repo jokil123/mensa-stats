@@ -21,5 +21,5 @@ enum StateMachineError
 struct Context
 {
     State state;
-    int devices;
+    float devices;
 };
