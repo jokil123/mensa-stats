@@ -1,4 +1,4 @@
-import { start_mongo } from '$lib/scripts/server/db/mongo';
+import { start_mongo } from '$lib/server/db/mongo';
 import 'log-timestamp';
 
 try {

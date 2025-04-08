@@ -1,4 +1,4 @@
-import { getOccupancy } from '$lib/scripts/server/db/occupancy';
+import { getOccupancy } from '$lib/server/db/occupancy';
 import { error, type RequestEvent } from '@sveltejs/kit';
 
 // This function will return 200 OK with no content if the latest datapoint is less than 10 minutes old

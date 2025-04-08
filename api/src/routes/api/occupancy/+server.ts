@@ -1,5 +1,5 @@
-import { authorizeDevice } from '$lib/scripts/server/db/authorize';
-import { saveOccupancyEntry } from '$lib/scripts/server/db/occupancy';
+import { authorizeDevice } from '$lib/server/db/authorize';
+import { saveOccupancyEntry } from '$lib/server/db/occupancy';
 import { error, type RequestEvent } from '@sveltejs/kit';
 import { Ajv } from 'ajv';
 
@@ -14,7 +14,7 @@ const validateJSON = new Ajv().compile({
 	properties: {
 		device: { type: 'string' },
 		token: { type: 'string' },
-		occupancy: { type: 'integer' }
+		occupancy: { type: 'number' }
 	},
 	required: ['device', 'token', 'occupancy'],
 	additionalProperties: false
@@ -31,6 +31,10 @@ export async function POST({ request }: RequestEvent) {
 
 	if (!validateJSON(json)) {
 		error(400, 'Malformed data!');
+	}
+
+	if (json.occupancy < 0) {
+		error(400, 'Occupancy may not be negative!');
 	}
 
 	// console.log(json);
