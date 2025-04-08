@@ -1,5 +1,5 @@
-import { authorizeDevice } from '$lib/scripts/server/db/authorize';
-import { saveOccupancyEntry } from '$lib/scripts/server/db/occupancy';
+import { authorizeDevice } from '$lib/server/db/authorize';
+import { saveOccupancyEntry } from '$lib/server/db/occupancy';
 import { error, type RequestEvent } from '@sveltejs/kit';
 import { Ajv } from 'ajv';
 

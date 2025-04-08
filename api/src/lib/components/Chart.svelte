@@ -2,8 +2,8 @@
 	import { onMount } from 'svelte';
 	import Chart, { type ChartConfiguration } from 'chart.js/auto';
 	import 'chartjs-adapter-moment';
-	import type { HistoryPoint } from '$lib/scripts/db/occupancy';
-	import { cursorPlugin } from '$lib/scripts/chartjsCursor';
+	import { cursorPlugin } from '$lib/global/chartjsCursor';
+	import type { HistoryPoint } from '$lib/global/historyPoint';
 
 	let chartGridColor = 'rgba(255,255,255,0.3)';
 	let chartLabelColor = '#d1d5db';

@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { cursorPlugin } from '$lib/scripts/chartjsCursor';
-	import type { HistoryPoint } from '$lib/scripts/db/occupancy';
-
+	import type { HistoryPoint } from '$lib/global/historyPoint';
 	import Chart, { type ChartConfiguration } from 'chart.js/auto';
 	import { onMount } from 'svelte';
 
