@@ -1,0 +1,17 @@
+# Bluetooth
+CONFIG_BT_ENABLED=y
+CONFIG_BT_NIMBLE_ENABLED=y
+CONFIG_BT_NIMBLE_ROLE_CENTRAL=y
+CONFIG_BT_CONTROLLER_ENABLED=y
+CONFIG_BT_NIMBLE_MAX_CONNECTIONS=1 # Not strictly needed for scanner, but good default
+CONFIG_BT_NIMBLE_NVS_PERSIST=n     # For simplicity, disable NVS persistence for this example
+
+# Disable Bluedroid
+CONFIG_BLUEDROID_ENABLED=n
+
+# Enable NimBLE C++ high-level API
+# CONFIG_NIMBLE_CPP_ENABLE=y
+
+# Logging
+CONFIG_LOG_DEFAULT_LEVEL_INFO=y
+CONFIG_LOG_MAXIMUM_LEVEL_INFO=y
