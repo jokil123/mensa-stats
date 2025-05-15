@@ -1,12 +1,12 @@
-#include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
 #include "Config.h"
+#include "BLEScan.h"
 
-#include "NimBLEDevice.h"
-#include "NimBLEScan.h"
-#include "NimBLEAdvertisedDevice.h"
+// #include "NimBLEDevice.h"
+// #include "NimBLEScan.h"
+// #include "NimBLEAdvertisedDevice.h"
 
 #define TASK_DEFAULT_STACK_SIZE 2048
 
