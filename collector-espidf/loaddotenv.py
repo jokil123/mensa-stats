@@ -8,7 +8,7 @@ assert isfile(".env")
 
 try:
     e = open(".env", "r")
-    s = open("./src/Dotenv.h", "w")
+    s = open("./src/dotenv.h", "w")
     
     content = "#pragma once\n\n"
     

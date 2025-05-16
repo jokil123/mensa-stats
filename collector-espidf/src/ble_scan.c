@@ -1,4 +1,4 @@
-#include "BLEScan.h"
+#include "ble_scan.h"
 
 #include "esp_system.h"
 #include "esp_log.h"
@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <nimble/ble.h>
 #include <host/ble_gap.h>
+#include "msc_error.h"
 
 static const char *TAG_BLE = "BLE"; // move this to some shared files
 
@@ -85,4 +86,62 @@ static void ble_app_scan(void)
     {
         ESP_LOGI(TAG_BLE, "Scanning started...");
     }
+}
+
+static void ble_app_on_sync(void)
+{
+    int rc;
+
+    rc = ble_hs_util_ensure_addr();
+}
+
+static void nimble_host_config_init(void)
+{
+    /* Set host callbacks */
+    ble_hs_cfg.reset_cb = on_stack_reset;
+    ble_hs_cfg.sync_cb = on_stack_sync;
+    ble_hs_cfg.store_status_cb = ble_store_util_status_rr;
+
+    /* Store host configuration */
+    ble_store_config_init();
+}
+
+static void ble_init()
+{
+    esp_err_t ret;
+    int rc;
+
+    /* NVS flash initialization */
+    ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES ||
+        ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    if (ret != ESP_OK)
+    {
+        ESP_LOGE(TAG, "failed to initialize nvs flash, error code: %d ", ret);
+        return;
+    }
+
+    /* NimBLE host stack initialization */
+    ret = nimble_port_init();
+    if (ret != ESP_OK)
+    {
+        ESP_LOGE(TAG, "failed to initialize nimble stack, error code: %d ",
+                 ret);
+        return;
+    }
+
+    /* GAP service initialization */
+    rc = gap_init();
+    if (rc != 0)
+    {
+        ESP_LOGE(TAG, "failed to initialize GAP service, error code: %d", rc);
+        return;
+    }
+
+    /* NimBLE host configuration initialization */
+    nimble_host_config_init();
 }

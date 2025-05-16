@@ -1,8 +1,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
-#include "Config.h"
-#include "BLEScan.h"
+#include "config.h"
+#include "ble_scan.h"
 
 // #include "NimBLEDevice.h"
 // #include "NimBLEScan.h"
