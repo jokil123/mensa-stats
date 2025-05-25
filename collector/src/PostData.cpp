@@ -3,8 +3,10 @@
 #include <HTTPClient.h>
 #include <VarExpand.h>
 #include "wifi/WifiUtil.h"
+#include "Error.h"
 
-PostError postOccupancy(const char *api_url, const char *device, const char *token, float occupancy)
+// throws POST_EXCEPTION, POST_GUEST_LOGGED_OUT_ERROR, POST_302_ERROR, POST_NON_200_ERROR, POST_CONNECTION_ERROR, POST_READ_TIMEOUT_ERROR
+CollectorErr postOccupancy(const char *api_url, const char *device, const char *token, float occupancy)
 {
     HTTPClient http;
 
@@ -33,7 +35,7 @@ PostError postOccupancy(const char *api_url, const char *device, const char *tok
     {
         Serial.println(e.what());
         http.end();
-        return FATAL_ERROR;
+        return CollectorErr::POST_EXCEPTION;
     }
 
     if (httpResponseCode == 200)
@@ -48,11 +50,11 @@ PostError postOccupancy(const char *api_url, const char *device, const char *tok
         {
             Serial.println("Logged out from guest WIFI");
 
-            return GUEST_LOGGED_OUT_ERROR;
+            return CollectorErr::POST_GUEST_LOGGED_OUT_ERROR;
         }
 
         Serial.println("HTTP 302 Found");
-        return FATAL_ERROR;
+        return CollectorErr::POST_302_ERROR;
     }
     else if (httpResponseCode > 0)
     {
@@ -60,21 +62,21 @@ PostError postOccupancy(const char *api_url, const char *device, const char *tok
         Serial.println(httpResponseCode); // Print return code
         Serial.println(http.errorToString(httpResponseCode));
         http.end();
-        return FATAL_ERROR;
+        return CollectorErr::POST_NON_200_ERROR;
     }
     else if (httpResponseCode == -1)
     {
         http.end();
-        return CONNECTION_ERROR;
+        return CollectorErr::POST_CONNECTION_ERROR;
     }
     else
     {
         Serial.print("Error on sending POST: ");
         Serial.println(httpResponseCode);
         Serial.println(http.errorToString(httpResponseCode));
-        return READ_TIMEOUT_ERROR;
+        return CollectorErr::POST_READ_TIMEOUT_ERROR;
     }
 
     http.end();
-    return NO_ERROR;
+    return CollectorErr::NO_ERR;
 }

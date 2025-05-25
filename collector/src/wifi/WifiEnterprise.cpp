@@ -3,7 +3,7 @@
 #include <WiFi.h>
 #include <esp_wpa2.h>
 
-void connectToWifiEnterprise(const char *ssid, const char *username, const char *password)
+CollectorErr connectToWifiEnterprise(const char *ssid, const char *username, const char *password)
 {
     WiFi.mode(WIFI_STA);
 
@@ -34,4 +34,6 @@ void connectToWifiEnterprise(const char *ssid, const char *username, const char 
     Serial.println("\nConnected to Wi-Fi!");
     Serial.print("IP Address: ");
     Serial.println(WiFi.localIP());
+
+    return NO_ERR;
 }

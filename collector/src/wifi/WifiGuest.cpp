@@ -5,11 +5,13 @@
 #include "Mac.h"
 #include <HTTPClient.h>
 #include "WifiUtil.h"
+#include "Error.h"
 
 #define WIFI_SSID "RWTH-guests"
 #define LOGON_URL "https://access.wlan.rwth-aachen.de/login.php"
 
-bool sendGuestLogin()
+// throws GUEST_LOGIN_POST_ERROR
+CollectorErr sendGuestLogin()
 {
     Serial.println("Sending POST request to login...");
 
@@ -28,22 +30,25 @@ bool sendGuestLogin()
         Serial.print("Error on sending POST: ");
         Serial.println(httpResponseCode);
         http.end();
-        return false;
+        return CollectorErr::GUEST_LOGIN_POST_ERROR;
     }
 
     Serial.println("Logon successful");
     http.end();
-    return true;
+    return CollectorErr::NO_ERR;
 }
 
-ConnectToGuestError connectToGuest()
+// throws MAC_CHANGE_ERROR, CONNECT_MAX_RETRY_EXCEEDED, GUEST_LOGIN_POST_ERROR, PING_FAILED
+CollectorErr connectToGuest()
 {
+    CollectorErr res;
+
     Serial.println("Connecting to RWTH Guest Network...");
 
     // printStackUsage();
     if (!randomizeDeviceId())
     {
-        return MAC_RANDOMIZE_ERROR;
+        return CollectorErr::MAC_CHANGE_ERROR;
     }
 
     // printHeapUsage();
@@ -58,19 +63,21 @@ ConnectToGuestError connectToGuest()
     WiFi.begin(WIFI_SSID);
 
     Serial.println("Waiting for connection...");
-    tryBlockUntilConnection();
+    res = tryBlockUntilConnection(30);
 
     printWifiInfo();
 
-    if (!sendGuestLogin())
+    res = sendGuestLogin();
+    if (res != NO_ERR)
     {
-        return LOGIN_ERROR;
+        return res;
     }
 
-    if (!testConnection())
+    res = testConnection();
+    if (res != NO_ERR)
     {
-        return PING_FAILURE;
+        return res;
     }
 
-    return NO_ERROR;
+    return CollectorErr::NO_ERR;
 }

@@ -1,14 +1,15 @@
 #include <HTTPClient.h>
+#include "Error.h"
 
-bool tryBlockUntilDisconnected(int maxAttempts = -1);
+CollectorErr tryBlockUntilDisconnected(int maxAttempts = -1);
 
-bool tryBlockUntilConnection(int maxAttempts = -1);
+CollectorErr tryBlockUntilConnection(int maxAttempts = -1);
 
 void printWifiInfo();
 
 void printWifiNetworks();
 
-bool testConnection(const char *domain = "www.google.com");
+CollectorErr testConnection(const char *domain = "www.google.com");
 
 void collectHeaders(HTTPClient &http);
 

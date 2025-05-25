@@ -11,13 +11,6 @@ enum State
     TERMINATED,
 };
 
-enum StateMachineError
-{
-    WIFI_CONNECTION_ERROR,
-    POST_ERROR,
-    UNEXPECTED_ERROR,
-};
-
 struct Context
 {
     State state;

@@ -3,11 +3,12 @@
 #include <PostData.h>
 #include <Config.h>
 #include <stateMachine/StateMachine.h>
+#include "Error.h"
 
 void statePosting(Context *ctx)
 {
     Serial.println("Posting data...");
-    PostError status = postOccupancy(API_URL, DEVICE, TOKEN, ctx->devices);
+    CollectorErr status = postOccupancy(API_URL, DEVICE, TOKEN, ctx->devices);
 
     switch (status)
     {

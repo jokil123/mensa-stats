@@ -1,10 +1,11 @@
 #include "States.h"
 #include <Arduino.h>
 #include <wifi/WifiConnect.h>
+#include "Error.h"
 
 void stateConnecting(Context *ctx)
 {
-    ConnectToGuestError error;
+    CollectorErr error;
 
     try
     {
