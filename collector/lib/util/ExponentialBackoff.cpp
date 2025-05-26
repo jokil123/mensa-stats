@@ -1,31 +1,23 @@
 #include "ExponentialBackoff.h"
+#include "Config.h"
+#include <Arduino.h>
+#include "Config.h"
 
-ExponentialBackoff::ExponentialBackoff(int maxRetries, int baseDelay)
+void exponentialBackoff(int retries)
 {
-    this->maxRetries = maxRetries;
-    this->baseDelay = baseDelay;
-    this->retries = 0;
-    this->delay = baseDelay;
+    delay(pow(retries, BACKOFF_EXPONENT) * BACKOFF_FACTOR);
 }
 
-void ExponentialBackoff::reset()
+bool tryBackoff(int *retries)
 {
-    this->retries = 0;
-    this->delay = this->baseDelay;
-}
+    if (*retries > MAX_RETRIES)
+    {
+        return false;
+        (*retries) = 0;
+    }
 
-int ExponentialBackoff::getDelay()
-{
-    return this->delay;
-}
+    exponentialBackoff(*retries);
+    (*retries)++;
 
-void ExponentialBackoff::increment()
-{
-    this->retries++;
-    this->delay = this->baseDelay * (0 << this->retries);
-}
-
-int ExponentialBackoff::getRetries()
-{
-    return this->retries;
+    return true;
 }

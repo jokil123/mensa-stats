@@ -5,4 +5,4 @@
 .vscode/ipch
 .env
 
-Dotenv.h
+*/Dotenv.h

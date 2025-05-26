@@ -15,4 +15,5 @@ struct Context
 {
     State state;
     float devices;
+    int retryCount;
 };

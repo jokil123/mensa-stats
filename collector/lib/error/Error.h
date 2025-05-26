@@ -3,7 +3,6 @@
 enum CollectorErr
 {
     NO_ERR,
-    // FATAL_ERROR,
     POST_302_ERROR,
     POST_NON_200_ERROR,
     MAC_CHANGE_ERROR,

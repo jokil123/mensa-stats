@@ -9,7 +9,7 @@ void advanceStateMachine()
 {
     if (millis() > MAX_UPTIME)
     {
-        ESP.reboot();
+        ESP.restart();
     }
 
     switch (ctx->state)

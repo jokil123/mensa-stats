@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <wifi/WifiConnect.h>
 #include "Error.h"
+#include <ExponentialBackoff.h>
 
 void stateConnecting(Context *ctx)
 {
@@ -20,12 +21,25 @@ void stateConnecting(Context *ctx)
 
     switch (error)
     {
-    case NO_ERROR:
+    case MAC_CHANGE_ERROR:
+    case GUEST_LOGIN_POST_ERROR:
+        Serial.print(error);
+        Serial.println(": Terminating");
+        ctx->state = TERMINATED;
+        break;
+    case CONNECT_MAX_RETRY_EXCEEDED:
+    case PING_FAILED:
+        if (!tryBackoff(&(ctx->retryCount)))
+        {
+            ctx->state = TERMINATED;
+        }
+        break;
+    case NO_ERR:
         Serial.println("Connected to wifi");
         ctx->state = SCANNING;
         break;
     default:
-        Serial.println("Failed to Connect, Terminating...");
+        Serial.println("Unknown Error connecting to guest, terminating...");
         ctx->state = TERMINATED;
         break;
     }
