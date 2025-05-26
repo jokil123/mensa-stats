@@ -33,8 +33,6 @@
 			[...oneWeekAgo].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())[0] ||
 			mostRecentHistory;
 
-		// console.log(mostRecentHistory, oldestOneWeekAgo);
-
 		let scalingFactor = mostRecentHistory.occupancy / oldestOneWeekAgo.occupancy;
 
 		let prediction = oneWeekAgo.map((h) => {
