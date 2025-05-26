@@ -1,10 +1,13 @@
 #include "StateMachine.h"
 #include "states/States.h"
+#include <Util.h>
 
 Context *ctx = new Context{INIT, 0};
 
 void advanceStateMachine()
 {
+    printTimeSinceStart();
+
     switch (ctx->state)
     {
     case INIT:
