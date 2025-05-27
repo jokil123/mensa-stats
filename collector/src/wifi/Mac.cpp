@@ -4,6 +4,8 @@
 #include <Util.h>
 #include <WiFi.h>
 #include "WifiUtil.h"
+#include "Error.h"
+#include <Config.h>
 
 #define HOSTNAME_BUFFER_SIZE 10
 
@@ -38,10 +40,15 @@ void printMac(uint8_t mac[6])
 
 // Generates a random hostname and MAC address for the ESP32
 // This will cut the connection to the current network and reinitialize the WiFi
-bool randomizeDeviceId()
+// throws DISCONNECT_MAX_RETRY_EXCEEDED, MAC_CHANGE_ERROR
+CollectorErr randomizeDeviceId()
 {
     WiFi.disconnect(true, true);
-    tryBlockUntilDisconnected();
+    CollectorErr res = tryBlockUntilDisconnected(WIFI_MAX_RETRIES);
+    if (res != NO_ERR)
+    {
+        return res;
+    }
 
     char hostnameBuffer[HOSTNAME_BUFFER_SIZE]; // This used to be defined as a top-level variable, but that caused a memory corruption issue
     randomString(hostnameBuffer, HOSTNAME_BUFFER_SIZE);
@@ -63,8 +70,8 @@ bool randomizeDeviceId()
     {
         Serial.print("Error changing Mac Address: ");
         Serial.println(err);
-        return false;
+        return CollectorErr::MAC_CHANGE_ERROR;
     }
 
-    return true;
+    return CollectorErr::NO_ERR;
 }

@@ -3,34 +3,39 @@
 #include <PostData.h>
 #include <Config.h>
 #include <stateMachine/StateMachine.h>
+#include "Error.h"
+#include <ExponentialBackoff.h>
 
 void statePosting(Context *ctx)
 {
     Serial.println("Posting data...");
-    PostError status = postOccupancy(API_URL, DEVICE, TOKEN, ctx->devices);
+    CollectorErr error = postOccupancy(API_URL, DEVICE, TOKEN, ctx->devices);
 
-    switch (status)
+    switch (error)
     {
-    case NO_ERROR:
+    case NO_ERR:
         Serial.println("Data posted sucessfully");
         ctx->state = SCANNING;
         break;
-    case FATAL_ERROR:
-        Serial.println("Fatal error, terminating...");
-        ctx->state = TERMINATED;
-        break;
-    case CONNECTION_ERROR:
+    case POST_GUEST_LOGGED_OUT_ERROR:
+    case POST_CONNECTION_ERROR:
+    case POST_302_ERROR:
+        Serial.println(errStr(error));
         Serial.println("Connection error, reconnecting to wifi...");
         ctx->state = CONNECTING;
         break;
-    case READ_TIMEOUT_ERROR:
-        Serial.println("Couldn't reach api, retrying in 10 seconds...");
-        delay(10000);
-        ctx->state = POSTING;
+    case POST_NON_200_ERROR:
+    case POST_READ_TIMEOUT_ERROR:
+        Serial.println(errStr(error));
+        if (!tryBackoff(&(ctx->retryCount)))
+        {
+            ctx->state = TERMINATED;
+        }
         break;
-    case GUEST_LOGGED_OUT_ERROR:
-        Serial.println("Trying to reconnect...");
-        ctx->state = CONNECTING;
+    case POST_EXCEPTION:
+        Serial.println(errStr(error));
+        Serial.println("Fatal error, terminating...");
+        ctx->state = TERMINATED;
         break;
     }
 }

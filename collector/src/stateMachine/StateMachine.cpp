@@ -1,12 +1,16 @@
 #include "StateMachine.h"
 #include "states/States.h"
-#include <Util.h>
+#include <Arduino.h>
+#include <Config.h>
 
 Context *ctx = new Context{INIT, 0};
 
 void advanceStateMachine()
 {
-    printTimeSinceStart();
+    if (millis() > MAX_UPTIME)
+    {
+        ESP.restart();
+    }
 
     switch (ctx->state)
     {
@@ -23,6 +27,7 @@ void advanceStateMachine()
         statePosting(ctx);
         break;
     case TERMINATED:
+        stateTerminated(ctx);
         break;
     }
 }

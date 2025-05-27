@@ -2,8 +2,10 @@
 #include <WiFi.h>
 #include <ESP32Ping.h>
 #include <HTTPClient.h>
+#include <Error.h>
 
-bool tryBlockUntilDisconnected(int maxAttempts)
+// throws DISCONNECT_MAX_RETRY_EXCEEDED
+CollectorErr tryBlockUntilDisconnected(int maxAttempts)
 {
     Serial.print("Disconnecting: ");
 
@@ -15,16 +17,17 @@ bool tryBlockUntilDisconnected(int maxAttempts)
         if (remainingAttempts == 0)
         {
             Serial.println();
-            return false;
+            return CollectorErr::DISCONNECT_MAX_RETRY_EXCEEDED;
         }
         delay(1000);
         remainingAttempts--;
     }
     Serial.println();
-    return true;
+    return CollectorErr::NO_ERR;
 }
 
-bool tryBlockUntilConnection(int maxAttempts)
+// throws CONNECT_MAX_RETRY_EXCEEDED
+CollectorErr tryBlockUntilConnection(int maxAttempts)
 {
     Serial.print("Connecting: ");
 
@@ -36,13 +39,13 @@ bool tryBlockUntilConnection(int maxAttempts)
         if (remainingAttempts == 0)
         {
             Serial.println();
-            return false;
+            return CollectorErr::CONNECT_MAX_RETRY_EXCEEDED;
         }
         delay(1000);
         remainingAttempts--;
     }
     Serial.println();
-    return true;
+    return CollectorErr::NO_ERR;
 }
 
 void printWifiInfo()
@@ -69,9 +72,17 @@ void printWifiNetworks()
     }
 }
 
-bool testConnection(const char *domain)
+// throws PING_FAILED
+CollectorErr testConnection(const char *domain)
 {
-    return Ping.ping(domain);
+    if (Ping.ping(domain))
+    {
+        return CollectorErr::NO_ERR;
+    }
+    else
+    {
+        return CollectorErr::PING_FAILED;
+    }
 }
 
 void collectHeaders(HTTPClient &http)

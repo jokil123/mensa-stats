@@ -1,17 +1,5 @@
 #pragma once
 
-class ExponentialBackoff
-{
-private:
-    int maxRetries;
-    int baseDelay;
-    int retries;
-    int delay;
+void exponentialBackoff(int retries);
 
-public:
-    ExponentialBackoff(int maxRetries, int baseDelay);
-    void reset();
-    int getDelay();
-    void increment();
-    int getRetries();
-};
+bool tryBackoff(int *retries);

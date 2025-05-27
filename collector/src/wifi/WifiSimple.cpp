@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 
-bool connectToWifiSimple(const char *ssid, const char *password)
+CollectorErr connectToWifiSimple(const char *ssid, const char *password)
 {
     Serial.println("Connecting to Wi-Fi...");
 
@@ -18,5 +18,5 @@ bool connectToWifiSimple(const char *ssid, const char *password)
     Serial.print("IP Address: ");
     Serial.println(WiFi.localIP()); // Print IP Address
 
-    return true;
+    return NO_ERR;
 }
