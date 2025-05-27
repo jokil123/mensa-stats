@@ -72,7 +72,7 @@
 
 <div class="bg-gray-950 py-16">
 	<MarginBox>
-		{#if data.averagedHistory}
+		{#if data.averagedHistory && data.averagedHistory.length > 1}
 			<div class="mb-8 text-center">
 				<h2 class="text-3xl font-bold">Vorhersage</h2>
 				<p class="text-gray-400">Belegung anhand vorheriger Daten</p>
