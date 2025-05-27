@@ -4,10 +4,14 @@ import mongo from './mongo';
 export async function saveOccupancyEntry(device: string, occupancy: number) {
 	const collection = mongo().collection('occupancy');
 
+	let dateBucket = new Date();
+	dateBucket.setHours(0, 0, 0, 0);
+
 	const doc = {
 		timestamp: new Date(),
 		metadata: {
-			device
+			device,
+			date: dateBucket
 		},
 		occupancy
 	};

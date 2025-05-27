@@ -21,9 +21,6 @@
 		});
 	}
 
-	let min = $derived(Math.min(...history.map((h) => h.occupancy)));
-	let max = $derived(Math.max(0, ...history.map((h) => h.occupancy)));
-
 	type WeekChartData = { [day: string]: { [time: number]: HistoryPoint } };
 	const asArray = (wcd: WeekChartData): HistoryPoint[] => {
 		return Object.values(wcd)
