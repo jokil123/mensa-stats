@@ -6,6 +6,7 @@
 #include <HTTPClient.h>
 #include "WifiUtil.h"
 #include "Error.h"
+#include <Config.h>
 
 #define WIFI_SSID "RWTH-guests"
 #define LOGON_URL "https://access.wlan.rwth-aachen.de/login.php"
@@ -46,8 +47,9 @@ CollectorErr connectToGuest()
     Serial.println("Connecting to RWTH Guest Network...");
 
     // printStackUsage();
-    if (!randomizeDeviceId())
+    if (randomizeDeviceId() != NO_ERR)
     {
+        Serial.println("Error changing mac address");
         return CollectorErr::MAC_CHANGE_ERROR;
     }
 
@@ -63,7 +65,11 @@ CollectorErr connectToGuest()
     WiFi.begin(WIFI_SSID);
 
     Serial.println("Waiting for connection...");
-    res = tryBlockUntilConnection(30);
+    res = tryBlockUntilConnection(WIFI_MAX_RETRIES);
+    if (res != NO_ERR)
+    {
+        return res;
+    }
 
     printWifiInfo();
 

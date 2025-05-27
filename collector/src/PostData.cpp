@@ -67,6 +67,8 @@ CollectorErr postOccupancy(const char *api_url, const char *device, const char *
     else if (httpResponseCode == -1)
     {
         http.end();
+        Serial.print("Negative response code: ");
+        Serial.println(httpResponseCode);
         return CollectorErr::POST_CONNECTION_ERROR;
     }
     else

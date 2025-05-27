@@ -6,7 +6,6 @@ enum CollectorErr
     POST_302_ERROR,
     POST_NON_200_ERROR,
     MAC_CHANGE_ERROR,
-    GUEST_LOGIN_ERROR,
     GUEST_LOGIN_POST_ERROR,
     PING_FAILED,
     POST_CONNECTION_ERROR,
@@ -16,3 +15,5 @@ enum CollectorErr
     CONNECT_MAX_RETRY_EXCEEDED,
     DISCONNECT_MAX_RETRY_EXCEEDED,
 };
+
+const char *errStr(CollectorErr err);

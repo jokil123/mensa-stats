@@ -9,5 +9,8 @@
 #define MIN_UPTIME 5 * 60 * 1000       // only reboot if running for at least 5 min
 #define MAX_UPTIME 24 * 60 * 60 * 1000 // reboot every 24 hours
 #define MAX_RETRIES 5
+
 #define BACKOFF_EXPONENT 2
-#define BACKOFF_FACTOR 10
+#define BACKOFF_FACTOR 1000 // 10 seconds
+
+#define WIFI_MAX_RETRIES 30

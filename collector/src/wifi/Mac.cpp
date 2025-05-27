@@ -5,6 +5,7 @@
 #include <WiFi.h>
 #include "WifiUtil.h"
 #include "Error.h"
+#include <Config.h>
 
 #define HOSTNAME_BUFFER_SIZE 10
 
@@ -43,7 +44,7 @@ void printMac(uint8_t mac[6])
 CollectorErr randomizeDeviceId()
 {
     WiFi.disconnect(true, true);
-    CollectorErr res = tryBlockUntilDisconnected();
+    CollectorErr res = tryBlockUntilDisconnected(WIFI_MAX_RETRIES);
     if (res != NO_ERR)
     {
         return res;

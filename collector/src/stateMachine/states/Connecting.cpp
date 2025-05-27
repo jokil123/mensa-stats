@@ -23,12 +23,13 @@ void stateConnecting(Context *ctx)
     {
     case MAC_CHANGE_ERROR:
     case GUEST_LOGIN_POST_ERROR:
-        Serial.print(error);
+        Serial.print(errStr(error));
         Serial.println(": Terminating");
         ctx->state = TERMINATED;
         break;
     case CONNECT_MAX_RETRY_EXCEEDED:
     case PING_FAILED:
+        Serial.println(errStr(error));
         if (!tryBackoff(&(ctx->retryCount)))
         {
             ctx->state = TERMINATED;
@@ -40,6 +41,7 @@ void stateConnecting(Context *ctx)
         break;
     default:
         Serial.println("Unknown Error connecting to guest, terminating...");
+        Serial.println(errStr(error));
         ctx->state = TERMINATED;
         break;
     }
