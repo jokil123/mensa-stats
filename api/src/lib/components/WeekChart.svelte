@@ -8,12 +8,17 @@
 		history: HistoryPoint[];
 	};
 	let { history }: Props = $props();
-	let min = $derived(Math.min(...history.map((h) => h.occupancy)));
-	let max = $derived(Math.max(...history.map((h) => h.occupancy)));
 
 	type WeekChartData = { [day: string]: { [time: number]: HistoryPoint } };
+	const asArray = (wcd: WeekChartData): HistoryPoint[] => {
+		return Object.values(wcd)
+			.map((d) => Object.values(d))
+			.flat();
+	};
 
 	let weekChartData = $derived(generateWeekChartData(history));
+	let min = $derived(Math.min(...asArray(weekChartData).map((h) => h.occupancy)));
+	let max = $derived(Math.max(...asArray(weekChartData).map((h) => h.occupancy)));
 
 	function generateWeekChartData(history: HistoryPoint[]): WeekChartData {
 		let weekChartData: WeekChartData = {};
@@ -50,6 +55,21 @@
 		if (!dataAvailable(day, time)) return `#111827`;
 
 		let palette = ['#21c25d', '#84c04f', '#d4b53b', '#ffa340', '#ef4444'];
+		// let palette = ['#21c25d', '#97d718', '#ffcb00', '#ff8400', '#ef4444'];
+		// let palette = ['#21c25d', '#61c221', '#dfc51a', '#ef8844', '#ef4444'];
+		// let palette = [
+		// 	'#21c25d',
+		// 	'#84c04f',
+		// 	'#a9c04f',
+		// 	'#d4cf3b',
+		// 	'#d4c23b',
+		// 	'#ffcc40',
+		// 	'#ffb340',
+		// 	'#ff9040',
+		// 	'#ef6644',
+		// 	'#ef5544',
+		// 	'#ef4444'
+		// ];
 		let p = (getData(day, time).occupancy - min) / (max - min);
 		let paletteIndex = p * (palette.length - 1);
 
@@ -58,7 +78,6 @@
 
 	let width = $state(0);
 	let compact: boolean = $derived(width < 640);
-	let gridCols = $derived(compact);
 </script>
 
 <svelte:window bind:innerWidth={width} />
