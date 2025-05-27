@@ -102,7 +102,7 @@
 			>
 				{#if dataAvailable(day, time)}
 					<div class="text-white sm:font-bold">
-						{getData(day, time).occupancy.toFixed(0)}
+						{getData(day, time).occupancy.toFixed(1)}
 					</div>
 				{/if}
 			</div>

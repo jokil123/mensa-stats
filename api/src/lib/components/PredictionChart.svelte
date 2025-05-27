@@ -53,7 +53,7 @@
 		return historyPoints.map((h) => {
 			return {
 				x: h.timestamp,
-				y: h.occupancy.toFixed(0)
+				y: h.occupancy.toFixed(1)
 			};
 		});
 	};

@@ -63,7 +63,7 @@
 					{/if}
 				</p>
 				<p>
-					(vor {((Date.now() - data.occupancy.timestamp.getTime()) / (1000 * 60)).toFixed(0)} Minuten)
+					(vor {((Date.now() - data.occupancy.timestamp.getTime()) / (1000 * 60)).toFixed(1)} Minuten)
 				</p>
 			</div>
 		</div>
@@ -72,7 +72,7 @@
 
 <div class="bg-gray-950 py-16">
 	<MarginBox>
-		{#if !data.averagedHistory}
+		{#if data.averagedHistory}
 			<div class="mb-8 text-center">
 				<h2 class="text-3xl font-bold">Vorhersage</h2>
 				<p class="text-gray-400">Belegung anhand vorheriger Daten</p>
