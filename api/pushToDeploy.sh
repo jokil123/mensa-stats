@@ -1,5 +1,8 @@
 set -e
 
+npm i
+npm run build
+
 git checkout deploy
 git pull
 git merge master
