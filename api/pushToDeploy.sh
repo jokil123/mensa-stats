@@ -1,3 +1,5 @@
+set -e
+
 git checkout deploy
 git pull
 git merge master

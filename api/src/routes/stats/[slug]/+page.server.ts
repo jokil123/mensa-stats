@@ -21,7 +21,7 @@ export async function load({ params }) {
 	const averagedHistory = await getAveragedOccupancyHistory(device, 604800, 60);
 
 	if (!occupancy || !min || !max || !history || !averagedHistory) {
-		error(505, "Couldn't fetch data from db");
+		error(505, "Couldn't fetch data from db, this usually indicates no data has been collected");
 	}
 
 	return { occupancy, min, max, history, averagedHistory };

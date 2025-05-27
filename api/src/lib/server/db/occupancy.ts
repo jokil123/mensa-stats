@@ -1,3 +1,4 @@
+import type { HistoryPoint } from '$lib/global/historyPoint';
 import mongo from './mongo';
 
 // Saves an occupancy entry to the db
@@ -5,7 +6,7 @@ export async function saveOccupancyEntry(device: string, occupancy: number) {
 	const collection = mongo().collection('occupancy');
 
 	let dateBucket = new Date();
-	dateBucket.setHours(0, 0, 0, 0);
+	dateBucket.setUTCHours(0, 0, 0, 0);
 
 	const doc = {
 		timestamp: new Date(),
@@ -25,7 +26,7 @@ export async function getOccupancy(device: string): Promise<HistoryPoint | null>
 
 	const mostRecent = await collection
 		.find()
-		.filter({ metadata: { device: device } })
+		.filter({ 'metadata.device': device })
 		.sort({ timestamp: -1 })
 		.limit(1)
 		.toArray();
@@ -49,7 +50,7 @@ export async function getOccupancyMax(device: string, s: number): Promise<Histor
 		.find()
 		.filter({
 			timestamp: { $gte: new Date(now.getTime() - s * 1000) },
-			'metadata.device': { $eq: device }
+			'metadata.device': device
 		})
 		.sort({ occupancy: -1 })
 		.limit(1)
@@ -76,7 +77,7 @@ export async function getOccupancyMin(device: string, s: number): Promise<Histor
 		.find()
 		.filter({
 			timestamp: { $gte: new Date(now.getTime() - s * 1000) },
-			'metadata.device': { $eq: device }
+			'metadata.device': device
 		})
 		.sort({ occupancy: 1 })
 		.limit(1)
@@ -108,7 +109,7 @@ export async function getAveragedOccupancyHistory(
 			{
 				$match: {
 					timestamp: { $gte: new Date(now.getTime() - s * 1000) },
-					'metadata.device': { $eq: device }
+					'metadata.device': device
 				}
 			},
 			{
@@ -159,7 +160,7 @@ export async function getOccupancyHistory(device: string, s: number): Promise<Hi
 			{
 				$match: {
 					timestamp: { $gte: new Date(now.getTime() - s * 1000) },
-					'metadata.device': { $eq: device }
+					'metadata.device': device
 				}
 			},
 			{

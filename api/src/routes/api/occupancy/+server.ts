@@ -33,14 +33,12 @@ export async function POST({ request }: RequestEvent) {
 		error(400, 'Malformed data!');
 	}
 
-	if (json.occupancy < 0) {
-		error(400, 'Occupancy may not be negative!');
-	}
-
-	// console.log(json);
-
 	if (!(await authorizeDevice(json.device, json.token))) {
 		error(401, 'You are not authorized for this, nice try though lol');
+	}
+
+	if (json.occupancy < 0) {
+		error(400, 'Occupancy may not be negative!');
 	}
 
 	await saveOccupancyEntry(json.device, json.occupancy);
