@@ -1,4 +1,4 @@
 #pragma once
 
 void initBLE();
-int countDevices(int duration);
+float countDevices(int duration, int scanCount);

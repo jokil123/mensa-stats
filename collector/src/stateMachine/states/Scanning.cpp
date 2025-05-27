@@ -1,14 +1,16 @@
 #include "States.h"
 #include <Arduino.h>
 #include <ble/BLE.h>
+#include "Config.h"
 
 void stateScanning(Context *ctx)
 {
     try
     {
-        Serial.println("Scanning devices...");
-        // ctx->devices = countDevices(5 * 60 * 1000);
-        ctx->devices = countDevices(10000);
+        Serial.print("Scanning ");
+        Serial.print(SCAN_COUNT);
+        Serial.println(" times...");
+        ctx->devices = countDevices(SCAN_DURATION, SCAN_COUNT);
     }
     catch (const std::exception &e)
     {

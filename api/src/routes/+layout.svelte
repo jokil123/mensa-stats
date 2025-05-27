@@ -9,3 +9,9 @@ pt-16 text-gray-300"
 >
 	<slot />
 </div>
+
+<style lang="postcss">
+	:global(body) {
+		@apply bg-gray-900;
+	}
+</style>

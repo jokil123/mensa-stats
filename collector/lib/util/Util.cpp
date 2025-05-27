@@ -91,3 +91,45 @@ void randomString(char *buf, size_t buf_size)
     // Null-terminate the string to make it a valid C string
     buf[i] = '\0';
 }
+
+void printTimeSinceStart(bool nl)
+{
+    unsigned long currentMillis = millis();
+
+    unsigned long totalSeconds = currentMillis / 1000;
+    int seconds = totalSeconds % 60;
+
+    unsigned long totalMinutes = totalSeconds / 60;
+    int minutes = totalMinutes % 60;
+
+    unsigned long hours = totalMinutes / 60;
+
+    if (hours < 10)
+    {
+        Serial.print("0");
+    }
+    Serial.print(hours);
+    Serial.print(":");
+
+    if (minutes < 10)
+    {
+        Serial.print("0");
+    }
+    Serial.print(minutes);
+    Serial.print(":");
+
+    if (seconds < 10)
+    {
+        Serial.print("0");
+    }
+    Serial.print(seconds);
+
+    if (nl)
+    {
+        Serial.println("");
+    }
+    else
+    {
+        Serial.print(": ");
+    }
+}

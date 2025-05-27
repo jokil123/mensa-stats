@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { cursorPlugin } from '$lib/scripts/chartjsCursor';
-	import type { HistoryPoint } from '$lib/scripts/db/occupancy';
-
+	import { cursorPlugin } from '$lib/global/chartjsCursor';
+	import type { HistoryPoint } from '$lib/global/historyPoint';
 	import Chart, { type ChartConfiguration } from 'chart.js/auto';
 	import { onMount } from 'svelte';
 
@@ -34,8 +33,6 @@
 			[...oneWeekAgo].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())[0] ||
 			mostRecentHistory;
 
-		// console.log(mostRecentHistory, oldestOneWeekAgo);
-
 		let scalingFactor = mostRecentHistory.occupancy / oldestOneWeekAgo.occupancy;
 
 		let prediction = oneWeekAgo.map((h) => {
@@ -56,7 +53,7 @@
 		return historyPoints.map((h) => {
 			return {
 				x: h.timestamp,
-				y: h.occupancy.toFixed(0)
+				y: h.occupancy.toFixed(1)
 			};
 		});
 	};

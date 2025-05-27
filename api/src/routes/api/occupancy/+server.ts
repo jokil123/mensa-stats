@@ -1,5 +1,5 @@
-import { authorizeDevice } from '$lib/scripts/db/authorize';
-import { saveOccupancyEntry } from '$lib/scripts/db/occupancy';
+import { authorizeDevice } from '$lib/server/db/authorize';
+import { saveOccupancyEntry } from '$lib/server/db/occupancy';
 import { error, type RequestEvent } from '@sveltejs/kit';
 import { Ajv } from 'ajv';
 
@@ -14,7 +14,7 @@ const validateJSON = new Ajv().compile({
 	properties: {
 		device: { type: 'string' },
 		token: { type: 'string' },
-		occupancy: { type: 'integer' }
+		occupancy: { type: 'number' }
 	},
 	required: ['device', 'token', 'occupancy'],
 	additionalProperties: false
@@ -33,6 +33,10 @@ export async function POST({ request }: RequestEvent) {
 		error(400, 'Malformed data!');
 	}
 
+	if (json.occupancy < 0) {
+		error(400, 'Occupancy may not be negative!');
+	}
+
 	// console.log(json);
 
 	if (!(await authorizeDevice(json.device, json.token))) {
@@ -41,9 +45,9 @@ export async function POST({ request }: RequestEvent) {
 
 	await saveOccupancyEntry(json.device, json.occupancy);
 
-	console.log(`Measured ${json.occupancy} devices`);
+	console.log(`collector "${json.device}" measured ${json.occupancy} devices`);
 
-	return new Response('Number Received', {
+	return new Response('Number received', {
 		headers: {
 			'Content-Type': 'application/json'
 		}

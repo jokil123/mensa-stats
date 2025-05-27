@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 
+	let gaugeHeight = $state(0);
+
 	type props = {
 		max: number;
 		min: number;
@@ -61,7 +63,16 @@
 </script>
 
 <div class="flex justify-center">
-	<canvas id="gauge" style="width:100%;" class="max-w-[50rem]"></canvas>
+	<canvas bind:clientHeight={gaugeHeight} id="gauge" style="width:100%;" class="max-w-[50rem]"
+	></canvas>
+</div>
+
+<div
+	class="m-auto mb-10 flex w-full justify-between"
+	style="width:{gaugeHeight * 0.6}px; margin-top: {-gaugeHeight * 0.1}px"
+>
+	<p style="font-size: {gaugeHeight * 0.1}px;" class="font-bold">{min}</p>
+	<p style="font-size: {gaugeHeight * 0.1}px;" class="font-bold">{max}</p>
 </div>
 
 <style>

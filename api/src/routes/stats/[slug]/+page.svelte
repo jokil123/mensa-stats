@@ -63,7 +63,7 @@
 					{/if}
 				</p>
 				<p>
-					(vor {((Date.now() - data.occupancy.timestamp.getTime()) / (1000 * 60)).toFixed(0)} Minuten)
+					(vor {((Date.now() - data.occupancy.timestamp.getTime()) / (1000 * 60)).toFixed(1)} Minuten)
 				</p>
 			</div>
 		</div>
@@ -72,29 +72,36 @@
 
 <div class="bg-gray-950 py-16">
 	<MarginBox>
-		<div class="mb-8 text-center">
-			<h2 class="text-3xl font-bold">Vorhersage</h2>
-			<p class="text-gray-400">Belegung anhand vorheriger Daten</p>
-		</div>
-		<div class="mb-16">
-			<PredictionChart history={data.averagedHistory} />
-		</div>
+		{#if data.averagedHistory && data.averagedHistory.length > 1}
+			<div class="mb-8 text-center">
+				<h2 class="text-3xl font-bold">Vorhersage</h2>
+				<p class="text-gray-400">Belegung anhand vorheriger Daten</p>
+			</div>
+			<div class="mb-16">
+				<PredictionChart history={data.averagedHistory} />
+			</div>
 
-		<div class="mb-8 text-center">
-			<h2 class="text-3xl font-bold">Wochentage</h2>
-			<p class="text-gray-400">Belegung pro Wochentag</p>
-		</div>
-		<div class="mb-16">
-			<WeekChart history={data.averagedHistory} />
-		</div>
+			<div class="mb-8 text-center">
+				<h2 class="text-3xl font-bold">Wochentage</h2>
+				<p class="text-gray-400">Belegung pro Wochentag</p>
+			</div>
+			<div class="mb-16">
+				<WeekChart history={data.averagedHistory} />
+			</div>
 
-		<div class="mb-8 text-center">
-			<h2 class="text-3xl font-bold">Statistik</h2>
-			<p class="text-gray-400">Belegung der letzten sieben Tage</p>
-		</div>
-		<div class="mb-16 h-72">
-			<Chart history={data.averagedHistory} />
-		</div>
+			<div class="mb-8 text-center">
+				<h2 class="text-3xl font-bold">Statistik</h2>
+				<p class="text-gray-400">Belegung der letzten sieben Tage</p>
+			</div>
+			<div class="mb-16 h-72">
+				<Chart history={data.averagedHistory} />
+			</div>
+		{:else}
+			<div class="text-center">
+				<h2 class="text-3xl font-bold">Kein Daten vorhanden!</h2>
+				<p class="text-gray-400">Schaue später nochmal vorbei</p>
+			</div>
+		{/if}
 	</MarginBox>
 </div>
 

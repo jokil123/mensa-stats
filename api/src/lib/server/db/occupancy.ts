@@ -1,10 +1,4 @@
-import { timeStamp } from 'console';
 import mongo from './mongo';
-
-export type HistoryPoint = {
-	timestamp: Date;
-	occupancy: number;
-};
 
 // Saves an occupancy entry to the db
 export async function saveOccupancyEntry(device: string, occupancy: number) {

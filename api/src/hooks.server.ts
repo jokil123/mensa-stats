@@ -1,5 +1,5 @@
-import { start_mongo } from '$lib/scripts/db/mongo';
-import 'dotenv/config';
+import { start_mongo } from '$lib/server/db/mongo';
+import 'log-timestamp';
 
 try {
 	await start_mongo();

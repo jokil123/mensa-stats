@@ -49,7 +49,14 @@ bool randomizeDeviceId()
 
     WiFi.begin();
 
-    uint8_t mac[6] = {(random(0, 255) << 1), random(0, 255), random(0, 255), random(0, 255), random(0, 255), random(0, 255)};
+    uint8_t mac[6] = {
+        static_cast<uint8_t>(random(0, 255) << 1),
+        static_cast<uint8_t>(random(0, 255)),
+        static_cast<uint8_t>(random(0, 255)),
+        static_cast<uint8_t>(random(0, 255)),
+        static_cast<uint8_t>(random(0, 255)),
+        static_cast<uint8_t>(random(0, 255))};
+
     esp_err_t err = esp_wifi_set_mac(WIFI_IF_STA, mac);
 
     if (err != ESP_OK)
