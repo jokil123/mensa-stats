@@ -15,6 +15,7 @@ void statePosting(Context *ctx)
     {
     case NO_ERR:
         Serial.println("Data posted sucessfully");
+        ctx->lastSucessTime = millis();
         ctx->state = SCANNING;
         break;
     case POST_GUEST_LOGGED_OUT_ERROR:
@@ -27,7 +28,7 @@ void statePosting(Context *ctx)
     case POST_NON_200_ERROR:
     case POST_READ_TIMEOUT_ERROR:
         Serial.println(errStr(error));
-        if (!tryBackoff(&(ctx->retryCount)))
+        if (!tryBackoff(&(ctx->retryCount), ctx->state))
         {
             ctx->state = TERMINATED;
         }

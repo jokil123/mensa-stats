@@ -16,8 +16,17 @@ void exponentialBackoff(int retries)
     delay(t);
 }
 
-bool tryBackoff(int *retries)
+int lastState = 0;
+bool tryBackoff(int *retries, int state)
 {
+    // reset counter if state changes
+    if (lastState != state)
+    {
+        (*retries) = 0;
+        lastState = state;
+    }
+
+    // fail if the max tries have been exceeded
     if (*retries > MAX_RETRIES)
     {
         Serial.println("Max retries exceeded");
@@ -25,6 +34,7 @@ bool tryBackoff(int *retries)
         return false;
     }
 
+    // wait backoff and wait
     exponentialBackoff(*retries);
     (*retries)++;
 

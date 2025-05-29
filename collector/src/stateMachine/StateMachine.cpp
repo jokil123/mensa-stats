@@ -7,10 +7,7 @@ Context *ctx = new Context{INIT, 0};
 
 void advanceStateMachine()
 {
-    if (millis() > MAX_UPTIME)
-    {
-        ESP.restart();
-    }
+    stateWatchdog(ctx);
 
     switch (ctx->state)
     {

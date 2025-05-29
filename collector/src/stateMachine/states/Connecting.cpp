@@ -30,7 +30,7 @@ void stateConnecting(Context *ctx)
     case CONNECT_MAX_RETRY_EXCEEDED:
     case PING_FAILED:
         Serial.println(errStr(error));
-        if (!tryBackoff(&(ctx->retryCount)))
+        if (!tryBackoff(&(ctx->retryCount), ctx->state))
         {
             ctx->state = TERMINATED;
         }
