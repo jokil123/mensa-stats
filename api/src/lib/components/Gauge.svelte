@@ -72,7 +72,7 @@
 	style="width:{gaugeHeight * 0.6}px; margin-top: {-gaugeHeight * 0.1}px"
 >
 	<p style="font-size: {gaugeHeight * 0.1}px;" class="font-bold">{min.toFixed(1)}</p>
-	<p style="font-size: {gaugeHeight * 0.1}px;" class="font-bold">{min.toFixed(1)}</p>
+	<p style="font-size: {gaugeHeight * 0.1}px;" class="font-bold">{max.toFixed(1)}</p>
 </div>
 
 <style>
