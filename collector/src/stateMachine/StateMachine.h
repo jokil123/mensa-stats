@@ -16,5 +16,6 @@ struct Context
     State state;
     float devices;
     int retryCount;
-    unsigned long lastSucessTime;
+    unsigned long lastPostSucessTime;
+    unsigned long lastScanTime;
 };

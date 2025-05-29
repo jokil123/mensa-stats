@@ -15,7 +15,7 @@ void statePosting(Context *ctx)
     {
     case NO_ERR:
         Serial.println("Data posted sucessfully");
-        ctx->lastSucessTime = millis();
+        ctx->lastPostSucessTime = millis();
         ctx->state = SCANNING;
         break;
     case POST_GUEST_LOGGED_OUT_ERROR:

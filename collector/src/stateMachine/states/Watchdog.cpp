@@ -11,7 +11,7 @@ void stateWatchdog(Context *ctx)
         ESP.restart();
     }
 
-    unsigned long timeSinceSucess = millis() - ctx->lastSucessTime;
+    unsigned long timeSinceSucess = millis() - ctx->lastPostSucessTime;
 
     if (timeSinceSucess > MAX_TIME_SINCE_SUCCESS)
     {

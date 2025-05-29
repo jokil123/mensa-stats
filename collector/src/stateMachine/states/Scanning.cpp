@@ -5,6 +5,14 @@
 
 void stateScanning(Context *ctx)
 {
+    // the last scan is new enough, skip the scan and directly post it.
+    // this might reduce down times if the post fails and then successfully reconnects.
+    if (ctx->lastScanTime < SCAN_COUNT * SCAN_DURATION)
+    {
+        Serial.printf("Scan is new enough (%ds), skipping scan\n", ctx->lastScanTime / 1000);
+        ctx->state = POSTING;
+    }
+
     try
     {
         Serial.print("Scanning ");
@@ -20,5 +28,6 @@ void stateScanning(Context *ctx)
 
     Serial.print(ctx->devices);
     Serial.println(" devices scanned successfully");
+    ctx->lastScanTime = millis();
     ctx->state = POSTING;
 }
