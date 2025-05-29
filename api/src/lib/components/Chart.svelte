@@ -4,6 +4,7 @@
 	import 'chartjs-adapter-moment';
 	import { cursorPlugin } from '$lib/global/chartjsCursor';
 	import type { HistoryPoint } from '$lib/global/historyPoint';
+	import { roundN } from '$lib/global/util';
 
 	let chartGridColor = 'rgba(255,255,255,0.3)';
 	let chartLabelColor = '#d1d5db';
@@ -17,7 +18,7 @@
 			? history.map((h) => {
 					return {
 						x: h.timestamp,
-						y: h.occupancy.toFixed(1)
+						y: roundN(h.occupancy, 1)
 					};
 				})
 			: []

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { cursorPlugin } from '$lib/global/chartjsCursor';
 	import type { HistoryPoint } from '$lib/global/historyPoint';
+	import { roundN } from '$lib/global/util';
 	import Chart, { type ChartConfiguration } from 'chart.js/auto';
 	import { onMount } from 'svelte';
 
@@ -53,7 +54,7 @@
 		return historyPoints.map((h) => {
 			return {
 				x: h.timestamp,
-				y: h.occupancy.toFixed(1)
+				y: roundN(h.occupancy, 1)
 			};
 		});
 	};

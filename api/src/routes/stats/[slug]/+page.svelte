@@ -6,6 +6,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import WeekChart from '$lib/components/WeekChart.svelte';
 	import PredictionChart from '$lib/components/PredictionChart.svelte';
+	import { roundN } from '$lib/global/util';
 
 	let { data } = $props();
 
@@ -26,7 +27,7 @@
 
 		<div class="flex items-center justify-center">
 			<h3 class="text-7xl font-bold text-white">
-				{data.occupancy.occupancy}
+				{roundN(data.occupancy.occupancy, 1)}
 			</h3>
 			{#if data.occupancy.occupancy == data.max.occupancy}
 				<p title="Neuer Rekord!" class="cursor-pointer select-none text-5xl">🔥</p>
@@ -63,7 +64,7 @@
 					{/if}
 				</p>
 				<p>
-					(vor {((Date.now() - data.occupancy.timestamp.getTime()) / (1000 * 60)).toFixed(1)} Minuten)
+					(vor {roundN((Date.now() - data.occupancy.timestamp.getTime()) / (1000 * 60), 1)} Minuten)
 				</p>
 			</div>
 		</div>
