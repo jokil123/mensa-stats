@@ -4,7 +4,7 @@ Tired of waiting in the queue at the RWTH Mensa?
 
 Mensa-Measures give you an idea of how full the mensa is going to be by measuring the bluetooth devices present using an esp wroom 32 board.
 
-The data collected every five minutes, uploaded to a mongodb database using sveltekit and then displayed using a svelte frontent.
+The data is collected every five minutes, uploaded to a mongodb database using sveltekit and then displayed using a svelte frontent.
 
 If you have any issues, suggestions or improvements feel free to create a PR or issue.
 
