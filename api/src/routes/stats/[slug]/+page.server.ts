@@ -17,12 +17,17 @@ export async function load({ params }) {
 	const occupancy = await getOccupancy(device);
 	const max = await getOccupancyMax(device, 31556952);
 	const min = await getOccupancyMin(device, 31556952);
-	const history = await getOccupancyHistory(device, 604800);
+	// const history = await getOccupancyHistory(device, 604800);
 	const averagedHistory = await getAveragedOccupancyHistory(device, 604800, 60);
 
-	if (!occupancy || !min || !max || !history || !averagedHistory) {
+	// console.log('occupancy: ', occupancy);
+	// console.log('min: ', min);
+	// console.log('max: ', max);
+	// console.log('averagedHistory: ', averagedHistory);
+
+	if (!occupancy || !min || !max || !averagedHistory) {
 		error(505, "Couldn't fetch data from db, this usually indicates no data has been collected");
 	}
 
-	return { occupancy, min, max, history, averagedHistory };
+	return { occupancy, min, max, averagedHistory };
 }

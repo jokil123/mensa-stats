@@ -34,6 +34,10 @@
 			[...oneWeekAgo].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())[0] ||
 			mostRecentHistory;
 
+		if (!mostRecentHistory || !oldestOneWeekAgo) {
+			return [];
+		}
+
 		let scalingFactor = mostRecentHistory.occupancy / oldestOneWeekAgo.occupancy;
 
 		let prediction = oneWeekAgo.map((h) => {
@@ -171,6 +175,14 @@
 	});
 </script>
 
-<div class="chart-container m-auto" style="position: relative; height:100%; width:100%">
-	<canvas bind:this={canvas}></canvas>
+<div class="chart-container m-auto" style="position: relative; height:100%; width:100%;">
+	<canvas style="opacity:{prediction.length == 0 ? '0.33' : '1'}" bind:this={canvas}></canvas>
+	{#if prediction.length == 0}
+		<p
+			class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-2/3 text-3xl"
+			style="box-shadow: 0px 0px 20px 20px #030712; background: #030712"
+		>
+			Keine Daten
+		</p>
+	{/if}
 </div>
