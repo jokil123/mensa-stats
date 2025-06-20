@@ -17,6 +17,7 @@ void stateTerminated(Context *ctx)
     {
         Serial.print(".");
         delay(10 * 1000);
+        uptime = millis();
     }
 
     Serial.println("Restarting...");
