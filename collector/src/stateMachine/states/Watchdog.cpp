@@ -1,6 +1,7 @@
 #include "States.h"
 #include <Arduino.h>
 #include <Config.h>
+#include <Restart.h>
 
 void stateWatchdog(Context *ctx)
 {
@@ -8,7 +9,7 @@ void stateWatchdog(Context *ctx)
     {
         Serial.printf("Device uptime more than MAX_TIME_SINCE_SUCCESS, restarting in 5 seconds...\n");
         delay(5000);
-        ESP.restart();
+        Restart();
     }
 
     unsigned long timeSinceSucess = millis() - ctx->lastPostSucessTime;
@@ -17,7 +18,7 @@ void stateWatchdog(Context *ctx)
     {
         Serial.printf("Device has been failing for more than MAX_TIME_SINCE_SUCCESS, restartig in 5 seconds...\n");
         delay(5000);
-        ESP.restart();
+        Restart();
     }
 
     Serial.println("Watchdog OK!");

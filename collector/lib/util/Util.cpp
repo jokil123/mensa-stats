@@ -25,8 +25,7 @@ void printHeapUsage()
 void printStackUsage()
 {
     uint32_t freeStack = uxTaskGetStackHighWaterMark(NULL);
-    Serial.print("Free stack: ");
-    Serial.println(freeStack);
+    Serial.printf("Free stack: %d\n", freeStack);
 }
 
 float min(float a, float b)

@@ -15,8 +15,7 @@ CollectorErr connectToWifiSimple(const char *ssid, const char *password)
     }
 
     Serial.println("Connected!");
-    Serial.print("IP Address: ");
-    Serial.println(WiFi.localIP()); // Print IP Address
+    Serial.printf("IP Address: %s\n", WiFi.localIP().toString().c_str());
 
     return NO_ERR;
 }

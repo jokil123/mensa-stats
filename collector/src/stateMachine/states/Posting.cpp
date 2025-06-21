@@ -21,21 +21,19 @@ void statePosting(Context *ctx)
     case POST_GUEST_LOGGED_OUT_ERROR:
     case POST_CONNECTION_ERROR:
     case POST_302_ERROR:
-        Serial.println(errStr(error));
-        Serial.println("Connection error, reconnecting to wifi...");
+        Serial.printf("Connection error (%s), reconnecting to wifi...\n", errStr(error));
         ctx->state = CONNECTING;
         break;
     case POST_NON_200_ERROR:
     case POST_READ_TIMEOUT_ERROR:
-        Serial.println(errStr(error));
+        Serial.printf("%s: attempting backoff\n", errStr(error));
         if (!tryBackoff(&(ctx->retryCount), ctx->state))
         {
             ctx->state = TERMINATED;
         }
         break;
     case POST_EXCEPTION:
-        Serial.println(errStr(error));
-        Serial.println("Fatal error, terminating...");
+        Serial.printf("%s: Fatal error, terminating...\n", errStr(error));
         ctx->state = TERMINATED;
         break;
     }

@@ -12,7 +12,7 @@ void stateInit(Context *ctx)
     }
     catch (const std::exception &e)
     {
-        Serial.println(e.what());
+        Serial.printf("An exception occurred initializing BLE (%s)\n", e.what());
         ctx->state = TERMINATED;
     }
 

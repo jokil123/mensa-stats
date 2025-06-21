@@ -28,8 +28,7 @@ CollectorErr sendGuestLogin()
 
     if (httpResponseCode != 302)
     {
-        Serial.print("Error on sending POST: ");
-        Serial.println(httpResponseCode);
+        Serial.printf("Error on sending POST: %d\n", httpResponseCode);
         http.end();
         return CollectorErr::GUEST_LOGIN_POST_ERROR;
     }

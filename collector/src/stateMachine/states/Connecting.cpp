@@ -15,7 +15,7 @@ void stateConnecting(Context *ctx)
     }
     catch (const std::exception &e)
     {
-        Serial.println(e.what());
+        Serial.printf("An ecception occurred while connecting to guest: %s\n", e.what());
         ctx->state = TERMINATED;
     }
 
@@ -23,13 +23,12 @@ void stateConnecting(Context *ctx)
     {
     case MAC_CHANGE_ERROR:
     case GUEST_LOGIN_POST_ERROR:
-        Serial.print(errStr(error));
-        Serial.println(": Terminating");
+        Serial.printf("%s: Terminating\n", errStr(error));
         ctx->state = TERMINATED;
         break;
     case CONNECT_MAX_RETRY_EXCEEDED:
     case PING_FAILED:
-        Serial.println(errStr(error));
+        Serial.printf("%s: Trying backoff...\n", errStr(error));
         if (!tryBackoff(&(ctx->retryCount), ctx->state))
         {
             ctx->state = TERMINATED;
@@ -40,8 +39,7 @@ void stateConnecting(Context *ctx)
         ctx->state = SCANNING;
         break;
     default:
-        Serial.println("Unknown Error connecting to guest, terminating...");
-        Serial.println(errStr(error));
+        Serial.printf("Unknown Error connecting to guest (%s), terminating...\n", errStr(error));
         ctx->state = TERMINATED;
         break;
     }

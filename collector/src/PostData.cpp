@@ -21,8 +21,6 @@ CollectorErr postOccupancy(const char *api_url, const char *device, const char *
 
     snprintf(buffer, sizeof(buffer), "{\"device\": \"%s\", \"token\": \"%s\", \"occupancy\": %f}", device, token, occupancy);
 
-    // Serial.println(buffer);
-
     int httpResponseCode;
 
     try
@@ -33,14 +31,14 @@ CollectorErr postOccupancy(const char *api_url, const char *device, const char *
     }
     catch (const std::exception &e)
     {
-        Serial.println(e.what());
+        Serial.printf("Post exception %s\n", e.what());
         http.end();
         return CollectorErr::POST_EXCEPTION;
     }
 
     if (httpResponseCode == 200)
     {
-        // Serial.println("Post Ok");
+        Serial.println("Post Ok");
     }
     else if (httpResponseCode == 302)
     {
@@ -58,24 +56,20 @@ CollectorErr postOccupancy(const char *api_url, const char *device, const char *
     }
     else if (httpResponseCode > 0)
     {
-        Serial.print("Non 200 Response: ");
-        Serial.println(httpResponseCode); // Print return code
-        Serial.println(http.errorToString(httpResponseCode));
+        Serial.printf("Non 200 Response: %d (%s)\n", httpResponseCode, http.errorToString(httpResponseCode).c_str());
         http.end();
         return CollectorErr::POST_NON_200_ERROR;
     }
-    else if (httpResponseCode == -1)
+    else if (httpResponseCode < 0)
     {
         http.end();
-        Serial.print("Negative response code: ");
-        Serial.println(httpResponseCode);
+        Serial.printf("Negative response code: %d (%s)\n", httpResponseCode, http.errorToString(httpResponseCode).c_str());
+        Serial.printf("Request info: %s\n", urlBuf);
         return CollectorErr::POST_CONNECTION_ERROR;
     }
     else
     {
-        Serial.print("Error on sending POST: ");
-        Serial.println(httpResponseCode);
-        Serial.println(http.errorToString(httpResponseCode));
+        Serial.printf("Error on sending POST: %d (%s)\n", httpResponseCode, http.errorToString(httpResponseCode).c_str());
         return CollectorErr::POST_READ_TIMEOUT_ERROR;
     }
 

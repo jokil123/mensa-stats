@@ -50,12 +50,12 @@ CollectorErr tryBlockUntilConnection(int maxAttempts)
 
 void printWifiInfo()
 {
-    Serial.println("Connected Properties: ");
-    Serial.println(WiFi.localIP());
-    Serial.println(WiFi.macAddress());
-    Serial.println(WiFi.getHostname());
-    Serial.println(WiFi.getTxPower());
-    Serial.println(WiFi.RSSI());
+    Serial.println("Connection Properties: ");
+    Serial.printf("- Local IP:    %s\n", WiFi.localIP().toString().c_str());
+    Serial.printf("- Mac Address: %s\n", WiFi.macAddress().c_str());
+    Serial.printf("- Hostname:    %s\n", WiFi.getHostname());
+    Serial.printf("- TX Power:    %d\n", WiFi.getTxPower());
+    Serial.printf("- RSSI:        %d\n", WiFi.RSSI());
 }
 
 // This function semi-permanently breaks the esp
@@ -64,11 +64,10 @@ void printWifiNetworks()
 {
     int n = WiFi.scanNetworks();
 
-    Serial.print("Available SSIDS: ");
-    Serial.println(n);
+    Serial.printf("Available SSIDS: %d\n", n);
     for (int i = 0; i < n; i++)
     {
-        Serial.println(WiFi.SSID(i));
+        Serial.printf("- %s\n", WiFi.SSID(i));
     }
 }
 
@@ -122,9 +121,7 @@ void collectHeaders(HTTPClient &http)
 void printHeaders(HTTPClient &http, bool hideEmpty)
 {
 
-    Serial.print("======== Headers (");
-    Serial.print(http.headers());
-    Serial.println("): ========");
+    Serial.printf("======== Headers (%d) ========\n", http.headers());
 
     for (int i = 0; i < http.headers(); i++)
     {
@@ -133,9 +130,7 @@ void printHeaders(HTTPClient &http, bool hideEmpty)
             continue;
         }
 
-        Serial.print(http.headerName(i));
-        Serial.print(": ");
-        Serial.println(http.header(i));
+        Serial.printf("%s: %s \n", http.headerName(i).c_str(), http.header(i).c_str());
     }
 
     Serial.println("========================");

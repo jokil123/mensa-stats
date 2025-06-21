@@ -32,8 +32,7 @@ CollectorErr connectToWifiEnterprise(const char *ssid, const char *username, con
     }
 
     Serial.println("\nConnected to Wi-Fi!");
-    Serial.print("IP Address: ");
-    Serial.println(WiFi.localIP());
+    Serial.printf("IP Address: %s\n", WiFi.localIP().toString().c_str());
 
     return NO_ERR;
 }

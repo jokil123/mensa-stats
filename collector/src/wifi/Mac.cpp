@@ -68,8 +68,7 @@ CollectorErr randomizeDeviceId()
 
     if (err != ESP_OK)
     {
-        Serial.print("Error changing Mac Address: ");
-        Serial.println(err);
+        Serial.printf("Error changing Mac Address: %s\n", err);
         return CollectorErr::MAC_CHANGE_ERROR;
     }
 

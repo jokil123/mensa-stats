@@ -1,6 +1,7 @@
 #include "States.h"
 #include <Arduino.h>
 #include <Config.h>
+#include <Restart.h>
 
 // this state will eventually reboot the microcontroller
 // it will wait for some time before rebooting in case the program is in an endless crash cycle
@@ -21,5 +22,5 @@ void stateTerminated(Context *ctx)
     }
 
     Serial.println("Restarting...");
-    ESP.restart();
+    Restart();
 }

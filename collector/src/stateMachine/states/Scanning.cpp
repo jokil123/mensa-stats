@@ -16,19 +16,16 @@ void stateScanning(Context *ctx)
 
     try
     {
-        Serial.print("Scanning ");
-        Serial.print(SCAN_COUNT);
-        Serial.println(" times...");
+        Serial.printf("Scanning %d times...\n", SCAN_COUNT);
         ctx->devices = countDevices(SCAN_DURATION, SCAN_COUNT);
     }
     catch (const std::exception &e)
     {
-        Serial.println(e.what());
+        Serial.printf("An exception occured while scanning (%s)\n", e.what());
         ctx->state = TERMINATED;
     }
 
-    Serial.print(ctx->devices);
-    Serial.println(" devices scanned successfully");
+    Serial.printf("%d devices scanned successfully\n", ctx->devices);
     ctx->lastScanTime = millis();
     ctx->state = POSTING;
 }
