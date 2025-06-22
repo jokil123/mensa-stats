@@ -43,6 +43,8 @@ void printMac(uint8_t mac[6])
 // throws DISCONNECT_MAX_RETRY_EXCEEDED, MAC_CHANGE_ERROR
 CollectorErr randomizeDeviceId()
 {
+    Serial.printf("Randomizing device ID\n");
+
     WiFi.disconnect(true, true);
     CollectorErr res = tryBlockUntilDisconnected(WIFI_MAX_RETRIES);
     if (res != NO_ERR)

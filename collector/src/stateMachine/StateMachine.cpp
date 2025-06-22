@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <Config.h>
 
-Context *ctx = new Context{INIT, -1};
+Context *ctx = new Context{INIT, 0, 0, 0, 0, true};
 
 void advanceStateMachine()
 {

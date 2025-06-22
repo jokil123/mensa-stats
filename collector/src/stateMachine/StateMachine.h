@@ -18,4 +18,5 @@ struct Context
     int retryCount;
     unsigned long lastPostSucessTime;
     unsigned long lastScanTime;
+    bool dataPosted;
 };
