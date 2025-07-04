@@ -1,11 +1,13 @@
 #include "States.h"
 #include <Arduino.h>
 #include <ble/BLE.h>
+#include <Restart.h>
 
 void stateInit(Context *ctx)
 {
     try
     {
+        SetupResetPin();
         Serial.println("Starting up...");
         Serial.println("Initializing BLE...");
         initBLE();
