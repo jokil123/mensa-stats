@@ -10,7 +10,7 @@ void SetupResetPin()
 
 void Restart()
 {
-    Serial.printf("Restarting in 5 seconds...\n");
+    Serial.printf("Restarting using reset pin in 5 seconds...\n");
     delay(5000);
     digitalWrite(RESET_PIN, HIGH);
 }

@@ -11,3 +11,7 @@ https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/error-
 
 -5 post error code sometimes
 -11 read error (internet but no response from server)
+
+# Resetting the flash:
+
+`esptool.py --chip esp32 -p /dev/ttyUSB0 erase_flash`
