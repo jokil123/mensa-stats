@@ -17,3 +17,5 @@
 #define WIFI_MAX_RETRIES 30
 
 #define RESET_PIN 23
+
+#define USE_GUEST_WIFI false

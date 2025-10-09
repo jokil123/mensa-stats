@@ -3,6 +3,7 @@
 #include <wifi/WifiConnect.h>
 #include "Error.h"
 #include <ExponentialBackoff.h>
+#include <Dotenv.h>
 
 void stateConnecting(Context *ctx)
 {
@@ -11,7 +12,11 @@ void stateConnecting(Context *ctx)
     try
     {
         Serial.println("Connecting to wifi...");
+#if USE_GUEST_WIFI
         error = connectToGuest();
+#else
+        error = connectToWifiSimple(WIFI_SSID, WIFI_PASSWORD);
+#endif
     }
     catch (const std::exception &e)
     {
