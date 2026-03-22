@@ -8,11 +8,12 @@
 #include "Error.h"
 #include <Config.h>
 
-#define WIFI_SSID "RWTH-guests"
-#define LOGON_URL "https://access.wlan.rwth-aachen.de/login.php"
+const char *GUEST_WIFI_SSID = "RWTH-guests";
+const char *LOGON_URL = "https://access.wlan.rwth-aachen.de/login.php";
 
 // throws GUEST_LOGIN_POST_ERROR
-CollectorErr sendGuestLogin()
+CollectorErr
+sendGuestLogin()
 {
     Serial.println("Sending POST request to login...");
 
@@ -61,7 +62,7 @@ CollectorErr connectToGuest()
     // WiFi.enableLongRange(true);
     // Serial.println("Setting SSID");
     // printWifiNetworks();
-    WiFi.begin(WIFI_SSID);
+    WiFi.begin(GUEST_WIFI_SSID);
 
     Serial.println("Waiting for connection...");
     res = tryBlockUntilConnection(WIFI_MAX_RETRIES);
