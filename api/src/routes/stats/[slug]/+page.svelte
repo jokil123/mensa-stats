@@ -37,9 +37,9 @@
 
 		<Gauge min={data.min.occupancy} max={data.max.occupancy} current={data.occupancy.occupancy} />
 
-		<h3 class="mb-10 text-center text-xl font-bold italic">
-			Wie <OccupancyCaption p={percentage} />
-		</h3>
+		<!-- <h3 class="mb-10 text-center text-xl font-bold italic">
+			<OccupancyCaption p={percentage} />
+		</h3> -->
 
 		<div class="mb-5 flex items-center justify-center gap-7">
 			<div class="flex items-center justify-center gap-4">
